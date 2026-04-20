@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBwCD2V4X3pnBuQoAbWovfNReBLsY1gW34</string>
+	<key>GCM_SENDER_ID</key>
+	<string>910920787307</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.stj.stjMedilinkPlus</string>
+	<key>PROJECT_ID</key>
+	<string>stj-medilink-plus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>stj-medilink-plus.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:910920787307:ios:07ad4de636fa008878182e</string>
+</dict>
+</plist>

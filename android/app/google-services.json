@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "910920787307",
+    "project_id": "stj-medilink-plus",
+    "storage_bucket": "stj-medilink-plus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910920787307:android:8b60a0ab41d6fb0778182e",
+        "android_client_info": {
+          "package_name": "com.stj.stj_medilink_plus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910920787307-35j5irogt87n8p66l02avd7j2jfdpba0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stj.stj_medilink_plus",
+            "certificate_hash": "93c32915be702bf43c0561ee20e6cd7e3b3bd69b"
+          }
+        },
+        {
+          "client_id": "910920787307-ohmu5f351dmrc2h7i03j2hvmu7vrujfo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjnC2sjk6w9RtwfPaqc-FCoz4yHuoc1Zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910920787307-ohmu5f351dmrc2h7i03j2hvmu7vrujfo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.stj.stjMedilinkPlus"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

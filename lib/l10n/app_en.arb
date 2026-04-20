@@ -1,0 +1,101 @@
+{
+  "@@locale": "en",
+  "appName": "STJ MediLink",
+  "loginTitle": "Login to your Account",
+  "signupTitle": "Create your Account",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "contactNumber": "Contact Number",
+  "signIn": "Sign in",
+  "signUp": "Sign up",
+  "orSignInWith": "- Or sign in with -",
+  "orSignUpWith": "- Or sign up with -",
+  "noAccount": "Don''t have an account? ",
+  "signUpLink": "Sign up",
+  "alreadyAccount": "Already have an account? ",
+  "signInLink": "Sign in",
+  "signInWithPhone": "Sign in with Phone",
+  "enterOtp": "Enter OTP",
+  "sendOtp": "Send OTP",
+  "verifyOtp": "Verify OTP",
+  "otpSent": "OTP sent!",
+  "changeNumberResend": "Change number / Resend OTP",
+  "welcome": "Welcome!",
+  "patientDashboard": "Patient Dashboard",
+  "welcomePatient": "Welcome, Patient!",
+  "ambulanceDashboard": "EMT Dashboard",
+  "welcomeDriver": "Welcome, EMT!",
+  "adminDashboard": "Admin Dashboard",
+  "welcomeAdmin": "Welcome, Admin!",
+  "signOut": "Sign out",
+  "createAccount": "Create Account",
+  "ambulance": "EMT",
+  "admins": "Admins",
+  "patients": "Patients",
+  "fullName": "Full Name",
+  "phoneNumber": "Phone Number",
+  "newPassword": "New Password (leave blank to keep)",
+  "role": "Role",
+  "save": "Save",
+  "cancel": "Cancel",
+  "create": "Create",
+  "edit": "Edit",
+  "delete": "Delete",
+  "deleteAccount": "Delete Account",
+  "accountUpdated": "Account updated successfully",
+  "accountCreated": "account created!",
+  "accountDeleted": "Account deleted",
+  "forgotPassword": "Forgot Password?",
+  "resetPassword": "Reset Password",
+  "resetPasswordSubtitle": "Enter your email address and we''ll send you a link to reset your password.",
+  "sendResetLink": "Send Reset Link",
+  "resetEmailSent": "Reset Email Sent!",
+  "resetEmailSentDesc": "We''ve sent a password reset link to {email}. Check your inbox and follow the instructions.",
+  "@resetEmailSentDesc": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "backToLogin": "Back to Login",
+  "emailRequired": "Please enter your email address",
+  "resetLinkSent": "Password reset link sent to your email",
+  "patient": "Patient",
+  "sosButton": "SOS",
+  "yourLocation": "Your location",
+  "locating": "Locating...",
+  "requestAmbulance": "Request {type} EMT",
+  "@requestAmbulance": {
+    "placeholders": {
+      "type": { "type": "String" }
+    }
+  },
+  "confirmRequest": "Confirm Request",
+  "ambulanceType": "Type: {type} EMT",
+  "@ambulanceType": {
+    "placeholders": {
+      "type": { "type": "String" }
+    }
+  },
+  "price": "Price: {price}",
+  "@price": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "dispatchMessage": "An EMT will be dispatched to your location.",
+  "confirm": "Confirm",
+  "helpOnWay": "🚑 {type} EMT requested! Help is on the way.",
+  "@helpOnWay": {
+    "placeholders": {
+      "type": { "type": "String" }
+    }
+  },
+  "basicAmbulance": "Basic",
+  "advancedAmbulance": "Advanced",
+  "icuAmbulance": "ICU",
+  "neonatalAmbulance": "Neonatal",
+  "capacity2": "2 patients",
+  "capacity1": "1 patient",
+  "capacityInfant": "1 infant"
+}
