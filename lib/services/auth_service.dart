@@ -52,7 +52,6 @@ class AuthService {
     );
     final cred = await _auth.signInWithCredential(credential);
 
-    // Create Firestore doc only on first sign-in
     if (cred.additionalUserInfo?.isNewUser == true) {
       await _userService.createUser(
         uid: cred.user!.uid,

@@ -537,6 +537,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1 infant'**
   String get capacityInfant;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @useDevicePhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Device Phone Number'**
+  String get useDevicePhoneNumber;
+
+  /// No description provided for @enterPhoneDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number with country code (e.g. +94771234567).\n\nYou can also type it directly in the field.'**
+  String get enterPhoneDesc;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get editProfile;
+
+  /// No description provided for @imageTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Image too large. Please choose a smaller image.'**
+  String get imageTooLarge;
+
+  /// No description provided for @useMyPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my phone number'**
+  String get useMyPhoneNumber;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back,'**
+  String get welcomeBack;
+
+  /// No description provided for @areYouInEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you in emergency?'**
+  String get areYouInEmergency;
+
+  /// No description provided for @pressButtonHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Press the button below help will\nreach you soon.'**
+  String get pressButtonHelp;
+
+  /// No description provided for @yourCurrentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current location'**
+  String get yourCurrentLocation;
+
+  /// No description provided for @tapSosToShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap SOS to share your location'**
+  String get tapSosToShare;
+
+  /// No description provided for @personalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get personalInfo;
+
+  /// No description provided for @dateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of Birth'**
+  String get dateOfBirth;
+
+  /// No description provided for @gender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get gender;
+
+  /// No description provided for @selectGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Select gender'**
+  String get selectGender;
+
+  /// No description provided for @address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get address;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Street, City, Province'**
+  String get addressHint;
+
+  /// No description provided for @medicalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Information'**
+  String get medicalInfo;
+
+  /// No description provided for @bloodType.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Type'**
+  String get bloodType;
+
+  /// No description provided for @selectBloodType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select blood type'**
+  String get selectBloodType;
+
+  /// No description provided for @medicalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Notes / Allergies'**
+  String get medicalNotes;
+
+  /// No description provided for @medicalNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Diabetic, allergic to penicillin…'**
+  String get medicalNotesHint;
+
+  /// No description provided for @emergencyContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Contact'**
+  String get emergencyContact;
+
+  /// No description provided for @contactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Name'**
+  String get contactName;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Phone'**
+  String get contactPhone;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get genderFemale;
+
+  /// No description provided for @genderOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get genderOther;
+
+  /// No description provided for @genderPreferNot.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get genderPreferNot;
 }
 
 class _AppLocalizationsDelegate

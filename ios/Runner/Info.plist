@@ -21,6 +21,10 @@
 	<string>STJ MediLink needs access to your photos to set a profile picture.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>STJ MediLink needs camera access to take a profile picture.</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>GIDClientID</key>
+	<string>910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88.apps.googleusercontent.com</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

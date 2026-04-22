@@ -237,4 +237,105 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get capacityInfant => '1 infant';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully';
+
+  @override
+  String get takePhoto => 'Take a photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get useDevicePhoneNumber => 'Use Device Phone Number';
+
+  @override
+  String get enterPhoneDesc =>
+      'Enter your phone number with country code (e.g. +94771234567).\n\nYou can also type it directly in the field.';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get imageTooLarge => 'Image too large. Please choose a smaller image.';
+
+  @override
+  String get useMyPhoneNumber => 'Use my phone number';
+
+  @override
+  String get welcomeBack => 'Welcome back,';
+
+  @override
+  String get areYouInEmergency => 'Are you in emergency?';
+
+  @override
+  String get pressButtonHelp =>
+      'Press the button below help will\nreach you soon.';
+
+  @override
+  String get yourCurrentLocation => 'Your current location';
+
+  @override
+  String get tapSosToShare => 'Tap SOS to share your location';
+
+  @override
+  String get personalInfo => 'Personal Information';
+
+  @override
+  String get dateOfBirth => 'Date of Birth';
+
+  @override
+  String get gender => 'Gender';
+
+  @override
+  String get selectGender => 'Select gender';
+
+  @override
+  String get address => 'Address';
+
+  @override
+  String get addressHint => 'Street, City, Province';
+
+  @override
+  String get medicalInfo => 'Medical Information';
+
+  @override
+  String get bloodType => 'Blood Type';
+
+  @override
+  String get selectBloodType => 'Select blood type';
+
+  @override
+  String get medicalNotes => 'Medical Notes / Allergies';
+
+  @override
+  String get medicalNotesHint => 'e.g. Diabetic, allergic to penicillin…';
+
+  @override
+  String get emergencyContact => 'Emergency Contact';
+
+  @override
+  String get contactName => 'Contact Name';
+
+  @override
+  String get contactPhone => 'Contact Phone';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
+
+  @override
+  String get genderOther => 'Other';
+
+  @override
+  String get genderPreferNot => 'Prefer not to say';
 }

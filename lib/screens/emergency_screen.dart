@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import '../l10n/app_localizations.dart';
+import 'waiting_screen.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -392,13 +395,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l.helpOnWay(v.name)),
-                  backgroundColor: const Color(0xFF2D3A8C),
-                  duration: const Duration(seconds: 4),
-                ),
-              );
+              _submitRequest(context, l, v);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF2D3A8C),
@@ -412,6 +409,46 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _submitRequest(
+    BuildContext context,
+    AppLocalizations l,
+    _AmbulanceType v,
+  ) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final doc = await FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .add({
+            'uid': user?.uid,
+            'patientName': user?.displayName ?? user?.email ?? 'Patient',
+            'ambulanceType': v.name,
+            'price': v.price,
+            'latitude': _currentLocation.latitude,
+            'longitude': _currentLocation.longitude,
+            'status': 'pending',
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                WaitingScreen(requestId: doc.id, ambulanceType: v.name),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to send request: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
 

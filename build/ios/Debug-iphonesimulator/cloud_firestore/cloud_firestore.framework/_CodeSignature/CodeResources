@@ -26,7 +26,7 @@
 		</data>
 		<key>Headers/FLTFirebaseFirestoreUtils.h</key>
 		<data>
-		XTCFgGqLa212E9CatKHHy+7OEP8=
+		3qdeNvt4nuIoQYlJ/5REJvpgwn0=
 		</data>
 		<key>Headers/FLTFirebaseFirestoreWriter.h</key>
 		<data>
@@ -35,6 +35,10 @@
 		<key>Headers/FLTLoadBundleStreamHandler.h</key>
 		<data>
 		uwmzAhohtAIj8lLEB343UbzCohs=
+		</data>
+		<key>Headers/FLTPipelineParser.h</key>
+		<data>
+		9o6YMSTUfKBiAMZzKU9/Upkjh6w=
 		</data>
 		<key>Headers/FLTQuerySnapshotStreamHandler.h</key>
 		<data>
@@ -50,7 +54,7 @@
 		</data>
 		<key>Headers/FirestoreMessages.g.h</key>
 		<data>
-		X8/Y2KFYxj7Dx9Z0QBYceuKS2hk=
+		LMPmKpCcf8UdbQGFwW7tDHHn3yI=
 		</data>
 		<key>Headers/FirestorePigeonParser.h</key>
 		<data>
@@ -58,11 +62,11 @@
 		</data>
 		<key>Headers/cloud_firestore-umbrella.h</key>
 		<data>
-		Lle0aRGBh9MD3AY6EZ4QNvUJKjE=
+		hjUNyQ5wEX38R+TgQ/Gi2J0aFzU=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		2C8jdM9g5hdTdJ9tgp/aQZWOoxk=
+		UAPjbhPiAHJHDNVhcGj95+rSTME=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -110,7 +114,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			uqSwqtqpeZo86hvmmpCD/DXDBM7RQuOZfhx0kR7FsBY=
+			FTYd8Hb6/+kBXH51p8MAvnJgLSGqTvbeaN7M8qwqjUY=
 			</data>
 		</dict>
 		<key>Headers/FLTFirebaseFirestoreWriter.h</key>
@@ -125,6 +129,13 @@
 			<key>hash2</key>
 			<data>
 			MsoCv3h+T/8Y8J09hu7F+Nm0VUkFkIT2O7DgIHC9zDU=
+			</data>
+		</dict>
+		<key>Headers/FLTPipelineParser.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			byoXqVk9LwVFHG+tEWicVrXkTFN101E76TZDAdIjp9A=
 			</data>
 		</dict>
 		<key>Headers/FLTQuerySnapshotStreamHandler.h</key>
@@ -152,7 +163,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sRhKRpbwzNk7Y9eVlx8Cr6YGJeMH2IyHhj3QVr6Tb+E=
+			CDuZYkGjfOD5qaFdWZgOt1louAGvoo2DEHXYfrgK8IM=
 			</data>
 		</dict>
 		<key>Headers/FirestorePigeonParser.h</key>
@@ -166,7 +177,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			FkLCAtjDu1hx+/m4GS+wIZHVlOyiaKoaEY3ixyNa9so=
+			sH+6+/1B/UF8RssSt4GEWoNpyXbeOjmKJaaH9MjQmwM=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

@@ -382,40 +382,105 @@ class _LoginScreenState extends State<LoginScreen> {
     required Color fieldFill,
     required Color borderColor,
   }) {
-    return TextField(
+    return _ValidatedField(
       controller: controller,
-      obscureText: obscure,
+      hint: hint,
+      obscure: obscure,
       keyboardType: keyboardType,
-      style: TextStyle(
-        fontSize: 15,
-        color: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white
-            : const Color(0xFF1A1A1A),
-      ),
+      suffixIcon: suffixIcon,
+      prefixIconData: prefixIconData,
+      fieldFill: fieldFill,
+    );
+  }
+}
+
+// ── Validated field (blue when filled, red when empty) ───────────────────────
+
+class _ValidatedField extends StatefulWidget {
+  final TextEditingController controller;
+  final String hint;
+  final bool obscure;
+  final TextInputType keyboardType;
+  final Widget? suffixIcon;
+  final IconData? prefixIconData;
+  final Color fieldFill;
+
+  const _ValidatedField({
+    required this.controller,
+    required this.hint,
+    required this.fieldFill,
+    this.obscure = false,
+    this.keyboardType = TextInputType.text,
+    this.suffixIcon,
+    this.prefixIconData,
+  });
+
+  @override
+  State<_ValidatedField> createState() => _ValidatedFieldState();
+}
+
+class _ValidatedFieldState extends State<_ValidatedField> {
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasText = widget.controller.text.isNotEmpty;
+    widget.controller.addListener(_onChanged);
+  }
+
+  void _onChanged() {
+    final filled = widget.controller.text.isNotEmpty;
+    if (filled != _hasText) setState(() => _hasText = filled);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : const Color(0xFF1A1A1A);
+    // Blue when filled, red when empty
+    final idleBorder = _hasText ? const Color(0xFF2D3A8C) : Colors.red;
+    final idleWidth = _hasText ? 1.5 : 1.2;
+
+    return TextField(
+      controller: widget.controller,
+      obscureText: widget.obscure,
+      keyboardType: widget.keyboardType,
+      style: TextStyle(fontSize: 15, color: textColor),
       decoration: InputDecoration(
-        hintText: hint,
+        hintText: widget.hint,
         hintStyle: const TextStyle(color: Color(0xFFBBBBBB), fontSize: 15),
-        prefixIcon: prefixIconData != null
-            ? Icon(prefixIconData, color: const Color(0xFF9FA8DA), size: 20)
+        prefixIcon: widget.prefixIconData != null
+            ? Icon(
+                widget.prefixIconData,
+                color: _hasText ? const Color(0xFF2D3A8C) : Colors.red.shade300,
+                size: 20,
+              )
             : null,
-        suffixIcon: suffixIcon,
+        suffixIcon: widget.suffixIcon,
         filled: true,
-        fillColor: fieldFill,
+        fillColor: widget.fieldFill,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 18,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: borderColor),
+          borderSide: BorderSide(color: idleBorder, width: idleWidth),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: borderColor),
+          borderSide: BorderSide(color: idleBorder, width: idleWidth),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF2D3A8C), width: 1.5),
+          borderSide: const BorderSide(color: Color(0xFF2D3A8C), width: 2),
         ),
       ),
     );

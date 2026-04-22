@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../theme/theme_toggle_button.dart';
 import '../../theme/language_toggle_button.dart';
@@ -12,11 +13,12 @@ class PatientDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final user = FirebaseAuth.instance.currentUser;
     final name = user?.displayName?.isNotEmpty == true
         ? user!.displayName!
-        : user?.email?.split('@').first ?? 'Patient';
+        : user?.email?.split('@').first ?? l10n.patient;
 
     return Scaffold(
       backgroundColor: isDark
@@ -54,7 +56,7 @@ class PatientDashboard extends StatelessWidget {
           const LanguageToggleButton(),
           IconButton(
             icon: const Icon(Icons.account_circle_outlined),
-            tooltip: 'Profile',
+            tooltip: l10n.profile,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ProfileScreen()),
@@ -62,7 +64,7 @@ class PatientDashboard extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.logout_rounded),
-            tooltip: 'Sign out',
+            tooltip: l10n.signOut,
             onPressed: () async {
               await AuthService().signOut();
               if (context.mounted) {
@@ -88,7 +90,7 @@ class PatientDashboard extends StatelessWidget {
 
               // ── Welcome text ──────────────────────────────────
               Text(
-                'Welcome back,',
+                l10n.welcomeBack,
                 style: TextStyle(
                   fontSize: 14,
                   color: isDark ? Colors.white60 : Colors.grey.shade500,
@@ -108,7 +110,7 @@ class PatientDashboard extends StatelessWidget {
               // ── Heading ───────────────────────────────────────
               Center(
                 child: Text(
-                  'Are you in emergency?',
+                  l10n.areYouInEmergency,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 26,
@@ -120,7 +122,7 @@ class PatientDashboard extends StatelessWidget {
               const SizedBox(height: 10),
               Center(
                 child: Text(
-                  'Press the button below help will\nreach you soon.',
+                  l10n.pressButtonHelp,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -178,7 +180,7 @@ class PatientDashboard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Your current location',
+                            l10n.yourCurrentLocation,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
@@ -189,7 +191,7 @@ class PatientDashboard extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Tap SOS to share your location',
+                            l10n.tapSosToShare,
                             style: TextStyle(
                               fontSize: 12,
                               color: isDark

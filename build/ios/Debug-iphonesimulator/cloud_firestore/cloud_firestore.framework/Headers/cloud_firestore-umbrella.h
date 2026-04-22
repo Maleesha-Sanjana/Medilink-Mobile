@@ -17,6 +17,7 @@
 #import "FLTFirebaseFirestoreUtils.h"
 #import "FLTFirebaseFirestoreWriter.h"
 #import "FLTLoadBundleStreamHandler.h"
+#import "FLTPipelineParser.h"
 #import "FLTQuerySnapshotStreamHandler.h"
 #import "FLTSnapshotsInSyncStreamHandler.h"
 #import "FLTTransactionStreamHandler.h"

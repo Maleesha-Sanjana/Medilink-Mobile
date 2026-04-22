@@ -238,4 +238,106 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get capacityInfant => '1 குழந்தை';
+
+  @override
+  String get profile => 'சுயவிவரம்';
+
+  @override
+  String get saveChanges => 'மாற்றங்களை சேமிக்கவும்';
+
+  @override
+  String get profileUpdated => 'சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது';
+
+  @override
+  String get takePhoto => 'புகைப்படம் எடுக்கவும்';
+
+  @override
+  String get chooseFromGallery => 'கேலரியிலிருந்து தேர்வு செய்க';
+
+  @override
+  String get useDevicePhoneNumber => 'சாதன தொலைபேசி எண்ணை பயன்படுத்தவும்';
+
+  @override
+  String get enterPhoneDesc =>
+      'நாட்டு குறியீட்டுடன் உங்கள் தொலைபேசி எண்ணை உள்ளிடவும் (எ.கா. +94771234567).\n\nநேரடியாக புலத்தில் தட்டச்சு செய்யலாம்.';
+
+  @override
+  String get editProfile => 'சுயவிவரத்தை திருத்தவும்';
+
+  @override
+  String get imageTooLarge =>
+      'படம் மிகவும் பெரியது. சிறிய படத்தை தேர்வு செய்யவும்.';
+
+  @override
+  String get useMyPhoneNumber => 'என் தொலைபேசி எண்ணை பயன்படுத்தவும்';
+
+  @override
+  String get welcomeBack => 'மீண்டும் வரவேற்கிறோம்,';
+
+  @override
+  String get areYouInEmergency => 'நீங்கள் அவசரநிலையில் இருக்கிறீர்களா?';
+
+  @override
+  String get pressButtonHelp =>
+      'கீழே உள்ள பொத்தானை அழுத்தவும், உதவி விரைவில் வரும்.';
+
+  @override
+  String get yourCurrentLocation => 'உங்கள் தற்போதைய இடம்';
+
+  @override
+  String get tapSosToShare => 'உங்கள் இடத்தை பகிர SOS அழுத்தவும்';
+
+  @override
+  String get personalInfo => 'தனிப்பட்ட தகவல்';
+
+  @override
+  String get dateOfBirth => 'பிறந்த தேதி';
+
+  @override
+  String get gender => 'பாலினம்';
+
+  @override
+  String get selectGender => 'பாலினம் தேர்வு செய்க';
+
+  @override
+  String get address => 'முகவரி';
+
+  @override
+  String get addressHint => 'தெரு, நகரம், மாகாணம்';
+
+  @override
+  String get medicalInfo => 'மருத்துவ தகவல்';
+
+  @override
+  String get bloodType => 'இரத்த வகை';
+
+  @override
+  String get selectBloodType => 'இரத்த வகை தேர்வு செய்க';
+
+  @override
+  String get medicalNotes => 'மருத்துவ குறிப்புகள் / ஒவ்வாமை';
+
+  @override
+  String get medicalNotesHint => 'எ.கா. நீரிழிவு, பென்சிலின் ஒவ்வாமை…';
+
+  @override
+  String get emergencyContact => 'அவசர தொடர்பு';
+
+  @override
+  String get contactName => 'தொடர்பு பெயர்';
+
+  @override
+  String get contactPhone => 'தொடர்பு தொலைபேசி';
+
+  @override
+  String get genderMale => 'ஆண்';
+
+  @override
+  String get genderFemale => 'பெண்';
+
+  @override
+  String get genderOther => 'மற்றவை';
+
+  @override
+  String get genderPreferNot => 'கூற விரும்பவில்லை';
 }

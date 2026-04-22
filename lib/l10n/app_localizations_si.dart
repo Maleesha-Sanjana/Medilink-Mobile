@@ -238,4 +238,104 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get capacityInfant => 'ළදරුවෙකු 1';
+
+  @override
+  String get profile => 'පැතිකඩ';
+
+  @override
+  String get saveChanges => 'වෙනස්කම් සුරකින්න';
+
+  @override
+  String get profileUpdated => 'පැතිකඩ සාර්ථකව යාවත්කාලීන කරන ලදී';
+
+  @override
+  String get takePhoto => 'ඡායාරූපයක් ගන්න';
+
+  @override
+  String get chooseFromGallery => 'ගැලරියෙන් තෝරන්න';
+
+  @override
+  String get useDevicePhoneNumber => 'උපාංගයේ දුරකථන අංකය භාවිතා කරන්න';
+
+  @override
+  String get enterPhoneDesc =>
+      'ඔබේ දුරකථන අංකය රටේ කේතය සමඟ ඇතුළු කරන්න (උදා: +94771234567).\n\nඔබට එය කෙලින්ම ක්ෂේත්‍රයේ ටයිප් කළ හැකිය.';
+
+  @override
+  String get editProfile => 'පැතිකඩ සංස්කරණය කරන්න';
+
+  @override
+  String get imageTooLarge => 'රූපය ඉතා විශාලයි. කරුණාකර කුඩා රූපයක් තෝරන්න.';
+
+  @override
+  String get useMyPhoneNumber => 'මගේ දුරකථන අංකය භාවිතා කරන්න';
+
+  @override
+  String get welcomeBack => 'නැවත සාදරයෙන් පිළිගනිමු,';
+
+  @override
+  String get areYouInEmergency => 'ඔබ හදිසි අවස්ථාවකද?';
+
+  @override
+  String get pressButtonHelp => 'පහත බොත්තම ගහන්න, ඉක්මනින් උදව් ලැබේ.';
+
+  @override
+  String get yourCurrentLocation => 'ඔබේ වත්මන් ස්ථානය';
+
+  @override
+  String get tapSosToShare => 'ඔබේ ස්ථානය බෙදා ගැනීමට SOS ගහන්න';
+
+  @override
+  String get personalInfo => 'පෞද්ගලික තොරතුරු';
+
+  @override
+  String get dateOfBirth => 'උපන් දිනය';
+
+  @override
+  String get gender => 'ස්ත්‍රී පුරුෂ භාවය';
+
+  @override
+  String get selectGender => 'ස්ත්‍රී පුරුෂ භාවය තෝරන්න';
+
+  @override
+  String get address => 'ලිපිනය';
+
+  @override
+  String get addressHint => 'වීදිය, නගරය, පළාත';
+
+  @override
+  String get medicalInfo => 'වෛද්‍ය තොරතුරු';
+
+  @override
+  String get bloodType => 'රුධිර වර්ගය';
+
+  @override
+  String get selectBloodType => 'රුධිර වර්ගය තෝරන්න';
+
+  @override
+  String get medicalNotes => 'වෛද්‍ය සටහන් / අසාත්මිකතා';
+
+  @override
+  String get medicalNotesHint => 'උදා: දියවැඩියාව, පෙනිසිලින් සඳහා අසාත්මිකතා…';
+
+  @override
+  String get emergencyContact => 'හදිසි සම්බන්ධතාව';
+
+  @override
+  String get contactName => 'සම්බන්ධතා නම';
+
+  @override
+  String get contactPhone => 'සම්බන්ධතා දුරකථනය';
+
+  @override
+  String get genderMale => 'පිරිමි';
+
+  @override
+  String get genderFemale => 'ගැහැනු';
+
+  @override
+  String get genderOther => 'වෙනත්';
+
+  @override
+  String get genderPreferNot => 'කීමට කැමති නැත';
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
-import '../services/user_service.dart';
 import '../services/auth_error.dart';
+import '../services/user_service.dart';
 import '../main.dart';
 import '../theme/theme_toggle_button.dart';
 import '../theme/language_toggle_button.dart';
@@ -33,17 +33,11 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
 
   Future<void> _sendOtp() async {
     final phone = _phoneController.text.trim();
-    if (phone.length < 10) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Enter a valid phone number'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (!RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(phone)) {
+      _showError('Enter a valid number in E.164 format, e.g. +94771234567');
       return;
     }
     setState(() => _loading = true);
-
     try {
       await _auth.sendPhoneOtp(
         phoneNumber: phone,
@@ -55,12 +49,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
         onFailed: (FirebaseAuthException e) {
           if (!mounted) return;
           setState(() => _loading = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(authErrorMessage(e)),
-              backgroundColor: Colors.red,
-            ),
-          );
+          // Show the raw error code to help debug
+          _showError('${e.code}: ${e.message ?? authErrorMessage(e)}');
         },
         onCodeSent: (verificationId, _) {
           if (!mounted) return;
@@ -71,7 +61,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
           });
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('OTP sent!'),
+              content: Text('OTP sent! Check your SMS.'),
               backgroundColor: Colors.green,
             ),
           );
@@ -80,24 +70,14 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     } on Exception catch (e) {
       if (!mounted) return;
       setState(() => _loading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authErrorMessage(e)),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError(authErrorMessage(e));
     }
   }
 
   Future<void> _verifyOtp() async {
     final otp = _otpController.text.trim();
     if (otp.length != 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Enter the 6-digit OTP'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError('Enter the 6-digit OTP');
       return;
     }
     setState(() => _loading = true);
@@ -107,12 +87,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       _navigateToApp();
     } on Exception catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authErrorMessage(e)),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError(authErrorMessage(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -126,7 +101,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       await UserService().createUser(
         uid: user.uid,
         email: user.email ?? '',
-        phone: user.phoneNumber ?? '',
+        phone: user.phoneNumber ?? _phoneController.text.trim(),
         role: 'patient',
       );
     }
@@ -139,6 +114,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       MaterialPageRoute(builder: (_) => const AuthGate()),
       (_) => false,
     );
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.red));
   }
 
   @override
@@ -184,8 +165,6 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 40),
-
-                    // Logo
                     Center(
                       child: RichText(
                         text: TextSpan(
@@ -218,9 +197,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 48),
-
                     Text(
                       _codeSent ? l.enterOtp : l.signInWithPhone,
                       style: TextStyle(
@@ -229,9 +206,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         color: textColor,
                       ),
                     ),
-
                     const SizedBox(height: 8),
-
                     Text(
                       _codeSent
                           ? 'Enter the 6-digit code sent to ${_phoneController.text}'
@@ -241,19 +216,47 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         fontSize: 13,
                       ),
                     ),
-
                     const SizedBox(height: 28),
 
                     // Phone field
                     if (!_codeSent)
-                      _buildField(
+                      TextField(
                         controller: _phoneController,
-                        hint: '+94771234567',
                         keyboardType: TextInputType.phone,
-                        prefixIcon: Icons.phone_outlined,
-                        fieldFill: fieldFill,
-                        borderColor: borderColor,
-                        textColor: textColor,
+                        style: TextStyle(fontSize: 15, color: textColor),
+                        decoration: InputDecoration(
+                          hintText: '+94771234567',
+                          hintStyle: const TextStyle(
+                            color: Color(0xFFBBBBBB),
+                            fontSize: 15,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.phone_outlined,
+                            color: Color(0xFF9FA8DA),
+                            size: 20,
+                          ),
+                          filled: true,
+                          fillColor: fieldFill,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 18,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: borderColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: borderColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Color(0xFF2D3A8C),
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
                       ),
 
                     // OTP field
@@ -302,8 +305,6 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                       ),
 
                     const SizedBox(height: 28),
-
-                    // Action button
                     SizedBox(
                       height: 54,
                       child: ElevatedButton(
@@ -347,8 +348,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                                   _codeSent = false;
                                   _otpController.clear();
                                 }),
-                          child: Text(
-                            l.changeNumberResend,
+                          child: const Text(
+                            'Change number / Resend OTP',
                             style: TextStyle(
                               color: Color(0xFF2D3A8C),
                               fontWeight: FontWeight.w600,
@@ -358,50 +359,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                         ),
                       ),
                     ],
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildField({
-    required TextEditingController controller,
-    required String hint,
-    required TextInputType keyboardType,
-    required IconData prefixIcon,
-    required Color fieldFill,
-    required Color borderColor,
-    required Color textColor,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      style: TextStyle(fontSize: 15, color: textColor),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Color(0xFFBBBBBB), fontSize: 15),
-        prefixIcon: Icon(prefixIcon, color: const Color(0xFF9FA8DA), size: 20),
-        filled: true,
-        fillColor: fieldFill,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 18,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: borderColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: borderColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF2D3A8C), width: 1.5),
         ),
       ),
     );

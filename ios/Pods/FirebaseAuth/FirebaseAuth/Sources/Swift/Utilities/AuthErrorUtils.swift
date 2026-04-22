@@ -366,10 +366,6 @@ class AuthErrorUtils {
     error(code: .invalidProviderID, message: message)
   }
 
-  static func invalidDynamicLinkDomainError(message: String?) -> Error {
-    error(code: .invalidDynamicLinkDomain, message: message)
-  }
-
   static func invalidHostingLinkDomainError(message: String?) -> Error {
     error(code: .invalidHostingLinkDomain, message: message)
   }
@@ -572,7 +568,7 @@ class AuthErrorUtils {
     return error(code: .blockingCloudFunctionError, message: errorMessage)
   }
 
-  #if os(iOS)
+  #if os(iOS) || os(macOS)
     static func secondFactorRequiredError(pendingCredential: String?,
                                           hints: [MultiFactorInfo],
                                           auth: Auth)
@@ -585,7 +581,7 @@ class AuthErrorUtils {
 
       return error(code: .secondFactorRequired, userInfo: userInfo)
     }
-  #endif // os(iOS)
+  #endif // os(iOS) || os(macOS)
 
   static func recaptchaSDKNotLinkedError() -> Error {
     // TODO(ObjC): point the link to GCIP doc once available.

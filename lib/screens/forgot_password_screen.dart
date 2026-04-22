@@ -229,40 +229,12 @@ class _FormView extends StatelessWidget {
         const SizedBox(height: 36),
 
         // Email field
-        TextField(
+        _ValidatedField(
           controller: emailController,
+          hint: l.email,
+          fieldFill: fieldFill,
           keyboardType: TextInputType.emailAddress,
-          style: TextStyle(fontSize: 15, color: textColor),
-          decoration: InputDecoration(
-            hintText: l.email,
-            hintStyle: const TextStyle(color: Color(0xFFBBBBBB), fontSize: 15),
-            prefixIcon: const Icon(
-              Icons.mail_outline_rounded,
-              color: Color(0xFF9FA8DA),
-              size: 20,
-            ),
-            filled: true,
-            fillColor: fieldFill,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 18,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: borderColor),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: borderColor),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF2D3A8C),
-                width: 1.5,
-              ),
-            ),
-          ),
+          prefixIconData: Icons.mail_outline_rounded,
         ),
 
         const SizedBox(height: 28),
@@ -370,6 +342,32 @@ class _SuccessView extends StatelessWidget {
           ),
         ),
 
+        const SizedBox(height: 10),
+
+        // Spam warning
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.info_outline_rounded,
+              size: 14,
+              color: Color(0xFFFFAA00),
+            ),
+            const SizedBox(width: 6),
+            const Flexible(
+              child: Text(
+                "If you don't see it, check your spam or junk folder.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFFFFAA00),
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+
         const SizedBox(height: 12),
 
         // Email chip
@@ -427,6 +425,92 @@ class _SuccessView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Validated field (blue when filled, red when empty) ───────────────────────
+
+class _ValidatedField extends StatefulWidget {
+  final TextEditingController controller;
+  final String hint;
+  final Color fieldFill;
+  final TextInputType keyboardType;
+  final IconData? prefixIconData;
+
+  const _ValidatedField({
+    required this.controller,
+    required this.hint,
+    required this.fieldFill,
+    this.keyboardType = TextInputType.text,
+    this.prefixIconData,
+  });
+
+  @override
+  State<_ValidatedField> createState() => _ValidatedFieldState();
+}
+
+class _ValidatedFieldState extends State<_ValidatedField> {
+  bool _hasText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasText = widget.controller.text.isNotEmpty;
+    widget.controller.addListener(_onChanged);
+  }
+
+  void _onChanged() {
+    final filled = widget.controller.text.isNotEmpty;
+    if (filled != _hasText) setState(() => _hasText = filled);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : const Color(0xFF1A1A1A);
+    final idleBorder = _hasText ? const Color(0xFF2D3A8C) : Colors.red;
+    final idleWidth = _hasText ? 1.5 : 1.2;
+
+    return TextField(
+      controller: widget.controller,
+      keyboardType: widget.keyboardType,
+      style: TextStyle(fontSize: 15, color: textColor),
+      decoration: InputDecoration(
+        hintText: widget.hint,
+        hintStyle: const TextStyle(color: Color(0xFFBBBBBB), fontSize: 15),
+        prefixIcon: widget.prefixIconData != null
+            ? Icon(
+                widget.prefixIconData,
+                color: _hasText ? const Color(0xFF2D3A8C) : Colors.red.shade300,
+                size: 20,
+              )
+            : null,
+        filled: true,
+        fillColor: widget.fieldFill,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: idleBorder, width: idleWidth),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: idleBorder, width: idleWidth),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Color(0xFF2D3A8C), width: 2),
+        ),
+      ),
     );
   }
 }

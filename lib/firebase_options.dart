@@ -33,10 +33,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -63,8 +60,18 @@ class DefaultFirebaseOptions {
     messagingSenderId: '910920787307',
     projectId: 'stj-medilink-plus',
     storageBucket: 'stj-medilink-plus.firebasestorage.app',
-    iosClientId: '910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88.apps.googleusercontent.com',
+    iosClientId:
+        '910920787307-kgub9hpr0rugkfoni8cmol0kh3k7nh88.apps.googleusercontent.com',
     iosBundleId: 'com.stj.stjMedilinkPlus',
   );
 
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDSrCTv1okm-YnWTbOXFixQuaoHMWU3Oww',
+    appId: '1:910920787307:web:fa572091e7ae812078182e',
+    messagingSenderId: '910920787307',
+    projectId: 'stj-medilink-plus',
+    storageBucket: 'stj-medilink-plus.firebasestorage.app',
+    authDomain: 'stj-medilink-plus.firebaseapp.com',
+    measurementId: 'G-2CNV6TD71E',
+  );
 }
