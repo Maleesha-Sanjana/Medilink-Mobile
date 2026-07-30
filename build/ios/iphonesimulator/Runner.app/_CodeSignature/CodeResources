@@ -44,9 +44,265 @@
 		<data>
 		nFC1waP0YzYOchnqa85lPwrC73s=
 		</data>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/AgoraAiEchoCancellationExtension</key>
+		<data>
+		WGJQLGN0LQfwLK0C39Yfy8YJFX8=
+		</data>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/Info.plist</key>
+		<data>
+		8trtK5pYcxfxnzzB1TMMRfQZdzk=
+		</data>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		GafHlleEoreBk2S3P9oCIEvwUCI=
+		</data>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/AgoraAiEchoCancellationLLExtension</key>
+		<data>
+		6TmJK7BBROHw2j9hikXmZiMn4jg=
+		</data>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/Info.plist</key>
+		<data>
+		Lua77wiHrzjaXynwnV6EmFd8714=
+		</data>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		ZgkCcqOiH5Y/tyuimRAdL4NDcHs=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/AgoraAiNoiseSuppressionExtension</key>
+		<data>
+		26ZWd963Fu2kVnkJofBuGwLxySc=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/Info.plist</key>
+		<data>
+		OyEO7aSAkaTc6sHu2jxRzPw6IuM=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		2DbQAQ5PTJFs4VBlWD7jn32cJKA=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/AgoraAiNoiseSuppressionLLExtension</key>
+		<data>
+		W5EwMmh5hjbroyaDTokcxUcM5hA=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/Info.plist</key>
+		<data>
+		NAs3qTDWXOgSFgVAC1wQgYSVn/g=
+		</data>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		jVLIHnlSZdjcLofVATtD9QCvNUQ=
+		</data>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/AgoraAudioBeautyExtension</key>
+		<data>
+		OCx+UA5Vj+nqkzip416UZDcMR3U=
+		</data>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/Info.plist</key>
+		<data>
+		H+I8KlN1xaZxyzju53CN9zm9Ta4=
+		</data>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		Aq4+x+B9zTPbMa7w2TTfJOdnEk8=
+		</data>
+		<key>Frameworks/AgoraClearVisionExtension.framework/AgoraClearVisionExtension</key>
+		<data>
+		IxYhQEgdNJPIpArMiQjMlfziqdw=
+		</data>
+		<key>Frameworks/AgoraClearVisionExtension.framework/Info.plist</key>
+		<data>
+		biLyZIe/ww/TxU8e1qc8wPLW+jo=
+		</data>
+		<key>Frameworks/AgoraClearVisionExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		wtXihT8MDD1oqTaMZ8aC7ARh4qM=
+		</data>
+		<key>Frameworks/AgoraContentInspectExtension.framework/AgoraContentInspectExtension</key>
+		<data>
+		/L/FZBAii3T/ihwnbWjkqILQeKw=
+		</data>
+		<key>Frameworks/AgoraContentInspectExtension.framework/Info.plist</key>
+		<data>
+		Dbeu1JUNg8VoxsLHODRaXEk4uS0=
+		</data>
+		<key>Frameworks/AgoraContentInspectExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		w1IXM9IMIlUKiLhZ+K2mMzCTY9w=
+		</data>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/AgoraFaceCaptureExtension</key>
+		<data>
+		iqYzoR9LXheq0IYVsYMp+Em3XrQ=
+		</data>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/Info.plist</key>
+		<data>
+		nqurXDwQMwZeeVY/TUHz1g7rWRE=
+		</data>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		oGr/5Ny6nKrWHT+Ae+TpwxIEnw0=
+		</data>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/AgoraFaceDetectionExtension</key>
+		<data>
+		731xhZG8dl+i9iVu1GhhVNr1xLA=
+		</data>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/Info.plist</key>
+		<data>
+		v0Yu0SXr273dyNWrM4UvVSOtlMg=
+		</data>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		DpFcnIu+rhRdeQGMGRt6yWrA/bE=
+		</data>
+		<key>Frameworks/AgoraLipSyncExtension.framework/AgoraLipSyncExtension</key>
+		<data>
+		VVDClNR3VkNi2BVRKsljOszVnW0=
+		</data>
+		<key>Frameworks/AgoraLipSyncExtension.framework/Info.plist</key>
+		<data>
+		y21C4MLgnalf36b/V5swnpVVa1c=
+		</data>
+		<key>Frameworks/AgoraLipSyncExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		SIwIw/6Ilsf5lLSf0oiG20ts0aU=
+		</data>
+		<key>Frameworks/AgoraReplayKitExtension.framework/AgoraReplayKitExtension</key>
+		<data>
+		NHkWeyFeRJnep4yca5jkRJJKtg4=
+		</data>
+		<key>Frameworks/AgoraReplayKitExtension.framework/Info.plist</key>
+		<data>
+		j6wQnrPrq+ze1183h+UY7e15Pfs=
+		</data>
+		<key>Frameworks/AgoraReplayKitExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		gIQ5Z3dBi59JtRVPJABZrPLUHF0=
+		</data>
+		<key>Frameworks/AgoraRtcKit.framework/AgoraRtcKit</key>
+		<data>
+		DaUIdlefDJ9YpbEo4cA6BTZ5NX8=
+		</data>
+		<key>Frameworks/AgoraRtcKit.framework/Info.plist</key>
+		<data>
+		7LeS0ZhMT4acJ/qfqCmzMzNRKfI=
+		</data>
+		<key>Frameworks/AgoraRtcKit.framework/PrivacyInfo.xcprivacy</key>
+		<data>
+		ZxnHRZP8hmIedoM9Q/zg3kTUNWg=
+		</data>
+		<key>Frameworks/AgoraRtcKit.framework/_CodeSignature/CodeResources</key>
+		<data>
+		PJu6OFhzTYJdyQ1Nj0b5KJFYCh0=
+		</data>
+		<key>Frameworks/AgoraRtcWrapper.framework/AgoraRtcWrapper</key>
+		<data>
+		FUqQzUVighOXeqXxweH1L1eFjMA=
+		</data>
+		<key>Frameworks/AgoraRtcWrapper.framework/Info.plist</key>
+		<data>
+		zYi+ltOqcv03rTB7NxGPAZJ382g=
+		</data>
+		<key>Frameworks/AgoraRtcWrapper.framework/_CodeSignature/CodeResources</key>
+		<data>
+		XbAp0kLM3dFWeS66xZHhD8zDc4E=
+		</data>
+		<key>Frameworks/AgoraSoundTouch.framework/AgoraSoundTouch</key>
+		<data>
+		vcV6cWHUf6JhijiPlp8NE73K0sE=
+		</data>
+		<key>Frameworks/AgoraSoundTouch.framework/Info.plist</key>
+		<data>
+		anlVbuUGbfN1JVxXH61SsNQ6WD0=
+		</data>
+		<key>Frameworks/AgoraSoundTouch.framework/_CodeSignature/CodeResources</key>
+		<data>
+		8DHPHubWVSqONzFgpAjzIL4MJgo=
+		</data>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/AgoraSpatialAudioExtension</key>
+		<data>
+		bJpxb24J58ekwy9pkrx1VshZhcs=
+		</data>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/Info.plist</key>
+		<data>
+		l/op50P+Rp+40dXA4SOSs7Mx1Tw=
+		</data>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		FgXwNK1yldGR/blY4Adr1P2udek=
+		</data>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/AgoraVideoAv1EncoderExtension</key>
+		<data>
+		tcZqiYSIJgIN6wutHLlb4+dtbbw=
+		</data>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/Info.plist</key>
+		<data>
+		AZw3plP4sgU3M+JOqJ72u7isrkQ=
+		</data>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		NUyBmXJaMBL2jcIFZrDIzxo4myo=
+		</data>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/AgoraVideoEncoderExtension</key>
+		<data>
+		xwJQOdzYY6H0DNclmBeA/Qggcbk=
+		</data>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/Info.plist</key>
+		<data>
+		vbzBwHfJtNgyUlElvXOCz8irC1A=
+		</data>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		4cZhVWwo364gCpi6j0E1XD33Ke0=
+		</data>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/AgoraVideoQualityAnalyzerExtension</key>
+		<data>
+		mc1vU9e9NrSpUCQKzOgSLf/E2KI=
+		</data>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/Info.plist</key>
+		<data>
+		cXyFaV2zhGbJLwYtFsmsqtWMG10=
+		</data>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		J3a9oTc7s4ObBxrSGydO/ftiL+U=
+		</data>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/AgoraVideoSegmentationExtension</key>
+		<data>
+		VCbJ8l4Xv9DpzKTiGG7mzFcFCug=
+		</data>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/Info.plist</key>
+		<data>
+		ngyaI+HcGXDOsjD2uzbR4YkDv/Y=
+		</data>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/_CodeSignature/CodeResources</key>
+		<data>
+		7rh5TJMjhIu+Z4vnHnNWzeSs4tg=
+		</data>
+		<key>Frameworks/Agorafdkaac.framework/Agorafdkaac</key>
+		<data>
+		HVv2j2urBF/LrOn1pED0TsSCaqU=
+		</data>
+		<key>Frameworks/Agorafdkaac.framework/Info.plist</key>
+		<data>
+		7uMpMiuJwEL3gQ/00L5cXk8EViI=
+		</data>
+		<key>Frameworks/Agorafdkaac.framework/_CodeSignature/CodeResources</key>
+		<data>
+		yJTJiVAp38MeVxa2k8JyEa7vMuc=
+		</data>
+		<key>Frameworks/Agoraffmpeg.framework/Agoraffmpeg</key>
+		<data>
+		82YdaQ6rgqsHBUJXayef4l6tSHg=
+		</data>
+		<key>Frameworks/Agoraffmpeg.framework/Info.plist</key>
+		<data>
+		b/8K3tabt5E6k9XwRboeC2GMc+0=
+		</data>
+		<key>Frameworks/Agoraffmpeg.framework/_CodeSignature/CodeResources</key>
+		<data>
+		z+QMbH35yZUwd8ytChnvhLi8reM=
+		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		jqeW03E0OmwMGtjlVTLUcpbJ+9E=
+		Kj2TKW9elaxS0VJV9H5c+EVHLfQ=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +310,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		pvNjxTYF5vqZk1eVwKQKCjcvj+o=
+		hG1hVqaXiYHyFbzFmPknWwGxgY0=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -66,7 +322,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		jfQAWt61rkB9+KAJcK5jhWCMz18=
+		w03z3BLCxnSB/sx/htQ7fxQvkkM=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
 		<data>
@@ -82,7 +338,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		CtBQWqjDLrefXBlcM9GT3bV7UWk=
+		MT2jFXpO06sqnoE6gSqkuBoyeiY=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -902,6 +1158,30 @@
 		<data>
 		1GKSpq20OoFIxAuJBtHAw+vMZO8=
 		</data>
+		<key>Frameworks/agora_rtc_engine.framework/Info.plist</key>
+		<data>
+		P+ToUE0onZpSjDeKx62vAyeB++8=
+		</data>
+		<key>Frameworks/agora_rtc_engine.framework/_CodeSignature/CodeResources</key>
+		<data>
+		DiwohcDvaJAe0tlqggw2OOjbBHg=
+		</data>
+		<key>Frameworks/agora_rtc_engine.framework/agora_rtc_engine</key>
+		<data>
+		c/f08zgNM+edL3legFrwKkjKt6I=
+		</data>
+		<key>Frameworks/aosl.framework/Info.plist</key>
+		<data>
+		7ITf2AOhbhWNEt2spwBzW8wOJaA=
+		</data>
+		<key>Frameworks/aosl.framework/_CodeSignature/CodeResources</key>
+		<data>
+		0sezcwcreWfygzEO/k2tjEKq6GE=
+		</data>
+		<key>Frameworks/aosl.framework/aosl</key>
+		<data>
+		SXMjJOUf5wGmArw93Oxw2rdQ3eg=
+		</data>
 		<key>Frameworks/geolocator_apple.framework/Info.plist</key>
 		<data>
 		PpGCza7+u9fNNVp0ybcSXyCjgVE=
@@ -990,6 +1270,18 @@
 		<data>
 		/LX0ZlwxwIAIhjZaDB8EiH5KpXA=
 		</data>
+		<key>Frameworks/iris_method_channel.framework/Info.plist</key>
+		<data>
+		ifC5NBrCoRTlrnQuilMV1grxWb4=
+		</data>
+		<key>Frameworks/iris_method_channel.framework/_CodeSignature/CodeResources</key>
+		<data>
+		DVph9GfqXM8HFeMGXqMUS0Gf8nQ=
+		</data>
+		<key>Frameworks/iris_method_channel.framework/iris_method_channel</key>
+		<data>
+		09GUxT1mHwwCAtCHzH6gCrzXONs=
+		</data>
 		<key>Frameworks/leveldb.framework/Info.plist</key>
 		<data>
 		X5UGOnTFMRPpKXHTMFFX6m6O1w0=
@@ -1050,13 +1342,89 @@
 		<data>
 		PFHYbs0V3eUFDWQyYQcwEetuqEk=
 		</data>
+		<key>Frameworks/printing.framework/Info.plist</key>
+		<data>
+		OWRoKhXnkdTxi7LKCe56YDpRAEE=
+		</data>
+		<key>Frameworks/printing.framework/_CodeSignature/CodeResources</key>
+		<data>
+		PRTWU0P2yIy4r3Fw+C8PPb46Wh4=
+		</data>
+		<key>Frameworks/printing.framework/printing</key>
+		<data>
+		kbAn+1priEG1Gzuuk9+/bp5SmKM=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/Info.plist</key>
+		<data>
+		AexEelj4twRdh7K0FtXwcKgrJSQ=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/_CodeSignature/CodeResources</key>
+		<data>
+		tok0e5wcv5NpTn2Lrmm1ceNqzrQ=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation</key>
+		<data>
+		Txj5xCxYdXND5UjJUT5wyvepapw=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/Info.plist</key>
+		<data>
+		+nBdOtkTawpfg7j+yyJNsqxt09k=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		6uLTlq7fgHHWA8emYDf4ImHC+AY=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>
+		<data>
+		p9knDUn+lrOcoyL5xfQKXlw0ZBc=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/_CodeSignature/CodeResources</key>
+		<data>
+		FexKN5rwaWokZna7BU5pSn2wdQs=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios</key>
+		<data>
+		RWa/4dq/x++qulk+3NNEY4ARbl8=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/Info.plist</key>
+		<data>
+		OsYwPdl3tDZi3ezpi7H49zYCziw=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		/LX0ZlwxwIAIhjZaDB8EiH5KpXA=
+		</data>
+		<key>Frameworks/video_dec.framework/Info.plist</key>
+		<data>
+		0W9HigX73Ze5j2Aza9kUUBK3J9E=
+		</data>
+		<key>Frameworks/video_dec.framework/_CodeSignature/CodeResources</key>
+		<data>
+		FBEo6vPVZMN8LXvvN0jsoenxZ+0=
+		</data>
+		<key>Frameworks/video_dec.framework/video_dec</key>
+		<data>
+		rncBllZL/n1wVt9wYrs2DhkrHxI=
+		</data>
+		<key>Frameworks/video_enc.framework/Info.plist</key>
+		<data>
+		Y4UyW8IbpQNe13j2gzXQQryD3AE=
+		</data>
+		<key>Frameworks/video_enc.framework/_CodeSignature/CodeResources</key>
+		<data>
+		ZILa9QGYp71ggf6XxM+CQvTxogE=
+		</data>
+		<key>Frameworks/video_enc.framework/video_enc</key>
+		<data>
+		d0wUslNMhTdZWsLWZ6r0qnKvqX8=
+		</data>
 		<key>GoogleService-Info.plist</key>
 		<data>
 		3H9cNw9GHezCgxAoc6cxUt4ql7s=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		1oGD7ZVIChjHGhsPNWTUKmoOhBs=
+		/N6xmgwVQc996V1sGZVdJz+x1vE=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -1064,7 +1432,7 @@
 		</data>
 		<key>Runner.debug.dylib</key>
 		<data>
-		AjT0cGt3STMARsEuQg9cQn5VaGA=
+		cpuCA7J+VKIFCQo2eHe9HxWtB9E=
 		</data>
 		<key>__preview.dylib</key>
 		<data>
@@ -1077,6 +1445,14 @@
 		<key>google_sign_in_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
 		<data>
 		/LX0ZlwxwIAIhjZaDB8EiH5KpXA=
+		</data>
+		<key>permission_handler_apple_privacy.bundle/Info.plist</key>
+		<data>
+		mYe/yLXKUHShpenwXH8JKCuIY7s=
+		</data>
+		<key>permission_handler_apple_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		PgAJpgZlblxKbgx9eihlgflAQU8=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -1151,11 +1527,459 @@
 			y90o2JQjssm+7ysnziyWCNMNbGqdLnZ595pTgURE5T8=
 			</data>
 		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/AgoraAiEchoCancellationExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1eaCcKX+TIRwI5NVj4aFrdcfrpfvqvM+GotxzvZfF8Y=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			6ORQRHS9flj+vuesu9DbZ1BU2icXTh6sccOMvdjePZM=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OIi7wzV1tA+nIpcWNYmviE0u0dkYZUGD3BL1/T15YOk=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/AgoraAiEchoCancellationLLExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			dDiG6mRIQI8eAQC+WdG8EIAaVCLLBk4zwyMUG6hXSw4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/069OB7cLPK5q7SJ0jWN8LUjBDMNF2AN1/NwWauzD6E=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiEchoCancellationLLExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CZ0S4udtvHTBbhU7okkmkvFEWPnLMhvRMAWMxpNcjFc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/AgoraAiNoiseSuppressionExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			PutJFYk3A31VABZ9npNg9+EHEGo3dxvcXsc+18OT2OU=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Pyb+XZxVYGsN8vUKQGjBJ6yzQiQL0vB4zfZ6RnnmRqE=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			J8swzymg4g3yphiG161Xm4XmsxbBZYO9TNVOKbQbz2I=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/AgoraAiNoiseSuppressionLLExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K5zDC2N8Cpg9f5Hb1tBDPO28thtbyDk6SKm3kl3HXB8=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DRTYEQJQ5F3MVRQIkQxN5b1HzEMl7EyAzTkr+AwyZrk=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAiNoiseSuppressionLLExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3soREiRSaBlfl2oUVAXzJYl828f16sBV6VrIcl7+JeY=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/AgoraAudioBeautyExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rktMTxi/kVhAG4JN5i5CDvi9jeiDh+77BC/TWc6fzUU=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/ZL1z2VZq562JkF6x/moCi7G7nKyTefrUqqa4CHtSHM=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraAudioBeautyExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			IYqsxbNUxI0+UNMqqyL198/rq4DTBSke+fBFZEGX//w=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraClearVisionExtension.framework/AgoraClearVisionExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			dTyC1kZBM0tN+hkA8+hsN+TxtHc9+4HQ1k0huwqb5bw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraClearVisionExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			g6W4CjgUFp1h7THtbOcDXXz0ejo6J60zTiuGoLhgq8g=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraClearVisionExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7aJ4O7zXrpYFJWYeSHbz3r4ipmdn9bIr9E0heb0H/d8=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraContentInspectExtension.framework/AgoraContentInspectExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EvRVpjOBy/JCf5zEVnS68RBfw69N189jE4HLoSj7140=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraContentInspectExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			MrQn54K3pjIdGL1jH+OckJzVbrVEdj4ZXH5oNWf0Utc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraContentInspectExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			jrAF7onnSI6iexnPCokRe03EeUzpb24BTVGQYVg2hw0=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/AgoraFaceCaptureExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2tIBFFGCGpBlJr027pX3sAPNtijDXwQXNH4JYwbZ+LQ=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Z3UKuQWeVlUH5GVH4incsG+8NCu8GRjbHunJ0CL91pw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceCaptureExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			049JkQqjaH9WP0RnJU90kf8xNKk+2qqkfSsETrwCGjg=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/AgoraFaceDetectionExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			8QRbUUrzEvsrjCOJLt/fhApUT2B44R0+Pm8V19Yfjjw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			a/eDs6Duh1IWiUFxikSEgLYWgbsNjYYfXmXjJ6Ozyo4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraFaceDetectionExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			n849lZH+cxguSDeOzHtKW26bApsno7j7P1bhTxxq/h0=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraLipSyncExtension.framework/AgoraLipSyncExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xl5cu8SKnTD2ixPL2Xu5AXB9Lcc8/hWpcqIkvPjs2QQ=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraLipSyncExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			0JIi1bqIaBkQFwN5xYadzlZt7XCnzSECtaZIuCNN/W4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraLipSyncExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HGcUjrZFHc8wgCizRRxQUObx1ebUfVENRoajJ4X6CPc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraReplayKitExtension.framework/AgoraReplayKitExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ZqOlsEuXZIGIX56stePJHPbTvel+1/rnS54z3QLhgV4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraReplayKitExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			D4WOp5adxrooHF3ITYln9orQNb7oHAXHz0W6Xn0XXiQ=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraReplayKitExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BCRiASi3fRIYCFmZuQ9WGz5pv6yKnqkMP3NvNIbJQzk=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcKit.framework/AgoraRtcKit</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1PwIHYdv97FUfoAQ5tUDFGSOksMw//gQg1FBuQU9OMo=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcKit.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EPIeV/OpfpF6PuZD1HivHmjjAge8r0PlghKjr215vm8=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcKit.framework/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+QR911c2LM3SS4qnHDBaGzyjpZ34YQ/GHIyLudYZN2Y=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcKit.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			P4Oh64OlNVIvVZ0HxBU/x7E4dfbNnkkKeBt8znFzCdw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcWrapper.framework/AgoraRtcWrapper</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kEEuts/r/cKFq1ldKtIMOtk+DswR5t84m+QOlmrBABg=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcWrapper.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5G22m4UbXPYjtDwmuPBpf/TADzPR3MDJ3BzgGXxm9OQ=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraRtcWrapper.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vHSbTgdMLo5BZCHbbIqcmOEpmmG01pONgsEQUEOIaHI=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSoundTouch.framework/AgoraSoundTouch</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			RNpGpFrGp1ye5bC1d+b27+LfrxPFpf/zHqHsHOy+IAg=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSoundTouch.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xVkMqs/pcyqP2j42YsxUQt17w88XFrFtD7vL/sQS3LM=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSoundTouch.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			XCDm0LRTOtB2Bf3TGMq0hZnckOkMLeAz20UvWm2Cqc4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/AgoraSpatialAudioExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bOO8qOhruJwF/9WyqjjnOMiNbqgFBeDO5lhHW5k1Osw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			w1L7mKV3+N53xZfBcwzmpfVxZ/1c7DSHRYsGdrr2NLc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraSpatialAudioExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HXNi3d6+mrpTBBf22HgdBXgOyJYwWq8q4tiiyfovbGc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/AgoraVideoAv1EncoderExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			9vy6xZNPNsPQ71rZRKqbnXeZ1R2Q9hA1ZsRw7y9CJJk=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			b7z0Z+vwfU8fq4sv1QY1e1Z6Op03KFcAhUWghpUNOok=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoAv1EncoderExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			N0wAlIn/yTvUR3XD95QxvStQFLxQgkg/Sha0qzQaWfE=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/AgoraVideoEncoderExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zH8GSVKcUx+5PTqV8OG7SydAmkxAtTeJPuesQFB1Btk=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			4UygPs8aRLzEpl8bnUYqR8z3UJDOYz7hddjklOrAGJ4=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoEncoderExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			I8tQkFslQqOdgW976AZ7ZDkMoMctfM++nx3ANQ9QCis=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/AgoraVideoQualityAnalyzerExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ogutbgzmTjt3Dmufnc82gkf5cPmc6CgM/vVaM7HszWw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7eq9nVTcfehnmzhH6inK6wSePyWE+ZzcBeb+RrXm7fc=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoQualityAnalyzerExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Vza6Yt5kp2m4iaiOPjUC/01PQ2acSNGCZ3LjfcbnG3k=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/AgoraVideoSegmentationExtension</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			IIT6a3KOIbzoK54VJRm7K3uMsqdem9ilgDzseBHMxJw=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lPavZISwXefI9KeBCJEV6S6K4l8QKAfWnUpbdi1x6XQ=
+			</data>
+		</dict>
+		<key>Frameworks/AgoraVideoSegmentationExtension.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			AGWEQUbZT3Vy+Waf7YlVdIATTDeY7mi9969ZpPjx3OQ=
+			</data>
+		</dict>
+		<key>Frameworks/Agorafdkaac.framework/Agorafdkaac</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			FA2zVa0z1XZrzPKF1o7Yh3sqbGLO4xGA5e6Ezsmeh8Q=
+			</data>
+		</dict>
+		<key>Frameworks/Agorafdkaac.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			PASak5hReoxCLSaM/qIPM0tBsNAKkaLblmxFmgwapPA=
+			</data>
+		</dict>
+		<key>Frameworks/Agorafdkaac.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			JRU38fkBmhHiWIgQk19K9ySWuFLrJBACxvyAC73PXUs=
+			</data>
+		</dict>
+		<key>Frameworks/Agoraffmpeg.framework/Agoraffmpeg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			dgoG8ZuCY8Q/jqojidwwb8fBUrNZJl4sk23pjmJDwrU=
+			</data>
+		</dict>
+		<key>Frameworks/Agoraffmpeg.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ylLYNuW109j0mcS1KBIzO0M2G8Zl4ZkptzF69DBDsMU=
+			</data>
+		</dict>
+		<key>Frameworks/Agoraffmpeg.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			qicXUdWR/i8hu1NsBFX+Buvr7RFuB3bOQVMpY1ebEWg=
+			</data>
+		</dict>
 		<key>Frameworks/App.framework/App</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TbQmRphE+bnVo1gvbuNe8xuJt+UfuzPaCFORdJLRzk4=
+			cycmziqxXeMeEv0W0tzZG1c/clIf3o1RR/R2qHpCNXw=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -1169,7 +1993,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			R0PBQNzltITpVWUN0X0AREEnUWtXM7tjxcDeTiuLE7I=
+			PrM3uhWRonOu0L+t9hqPRkt4FMxiZ+YxJrsK3BvA7Do=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -1190,7 +2014,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			o1nSeY0F1RFHWqJWyHLu6ijDrDzLa4M0ypYAzDNLR/4=
+			pejkibdwGtofhznuinO94eLl3eqcaOXXbzDGxmgLitI=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
@@ -1218,7 +2042,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hDHpEqqOPoyZ8fEB8jUMBR97j0bVi/KTLRF3PYZ8ICM=
+			d3EIQJJ/s+BtmpnG63qfSjU0MZPuRbJd8Acz47H8U3I=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -2396,6 +3220,48 @@
 			8jIheunt8qtqVBoo7/UM/gUwPCtHVv/5XMpy7MvDuJg=
 			</data>
 		</dict>
+		<key>Frameworks/agora_rtc_engine.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			aeJ+3oqHasXDaX5Ks83oxohk4+Z1TMuzfaALmuLybSo=
+			</data>
+		</dict>
+		<key>Frameworks/agora_rtc_engine.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			wGP6QR1/rI+H8wix+6oInbwBjS6qhk+meohfrJr+MZs=
+			</data>
+		</dict>
+		<key>Frameworks/agora_rtc_engine.framework/agora_rtc_engine</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			EbC4GlYAU5/EMwP550ioGHyIUlhZ72ChFGgCjACKyRk=
+			</data>
+		</dict>
+		<key>Frameworks/aosl.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VkNSi/iH6a3zpo5DUbEiTh+25WPypvecj/HCJwgjVrw=
+			</data>
+		</dict>
+		<key>Frameworks/aosl.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			KtXAcnD7gaWd8cRNwBqPmPVdf5D0Snpoh5fb61jGxx4=
+			</data>
+		</dict>
+		<key>Frameworks/aosl.framework/aosl</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3xB0w2W9yvRkIyDGXlb8V9YBDGsMR58avFbFOHB6l+c=
+			</data>
+		</dict>
 		<key>Frameworks/geolocator_apple.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -2550,6 +3416,27 @@
 			bS2g2NkwIn1CjB2TY7CtbjoS4sm2jFzilxWKdBL8jDE=
 			</data>
 		</dict>
+		<key>Frameworks/iris_method_channel.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			gAxhrcdtQVFkQbLg82ngn1I+Yg5Or0CVOC3DudMyRvw=
+			</data>
+		</dict>
+		<key>Frameworks/iris_method_channel.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			W9BTtbFCRXDRyLrOdhH9iRQAOHk0qc9Rj2P7/r61i0g=
+			</data>
+		</dict>
+		<key>Frameworks/iris_method_channel.framework/iris_method_channel</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			joJL2rwSRHAiTSl6gC+oTaoVhbu4iVWy9qch2y8SDfU=
+			</data>
+		</dict>
 		<key>Frameworks/leveldb.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -2655,6 +3542,139 @@
 			A7LHCDOjMaKx79Ef8WjtAqjq39Xn0fvzDuzHUJpK6kc=
 			</data>
 		</dict>
+		<key>Frameworks/printing.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7L7wT5rrAJ6ZtGzlniVDMuojhE+L8QnXXsB4mqCkjaU=
+			</data>
+		</dict>
+		<key>Frameworks/printing.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			fsvwL66LphHJ/bUn/UUTVLXPLa1I/Yu9NKsFGH6oCYs=
+			</data>
+		</dict>
+		<key>Frameworks/printing.framework/printing</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			1gWAFNcTsfPtEXd6krQk4a9yNSL0mnz14d8hB7BXM9w=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			7Z32mi8i7EPWbJpha+cyZ44zirhnCn7J4HpcXVXBWkc=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			CaHaZsu4pg30uQquws/dERODpAM6wjCDjaHI4rdDHaM=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			emyUTkXEx/qAxcAK+yycvIjNHUBcnj0y6pj/HujNX5I=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/CHjnI6JxBC1MLPa9YThUNVn5BI/Ka9u2GUkmx3WXrc=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BWQouTi9VwGKYAGdFcPB7i+nJ/I2h1mLu9k0hIsYCxo=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Oxcsn0K/tkQSnq1fdsNHX4xx9u159FduvWKYWmR7qEs=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			c1+/ff9uGgh6btAO59e0Cf1OdxyOlarihZKiUHoCaUI=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			wN5zCZDj6QyehpahGCuExyfYoWjsVH+eYIDEXzMjem8=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oSqoUc/LtPdXa5qsSwBLP3XbywQIEHUM2prCXb3paUc=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bS2g2NkwIn1CjB2TY7CtbjoS4sm2jFzilxWKdBL8jDE=
+			</data>
+		</dict>
+		<key>Frameworks/video_dec.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kMeGMJln+BzWZKK9aUDCcGACDHi2JWuBcHO96aA/6yw=
+			</data>
+		</dict>
+		<key>Frameworks/video_dec.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rBwOgnFR/0B32MkL+JFKxEbTPaKmSDXjX1ftn1/PLmo=
+			</data>
+		</dict>
+		<key>Frameworks/video_dec.framework/video_dec</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			nAw92VseHbEqYq/RdI7A2/YdWOW1ZWOMlmxk5WdxYNU=
+			</data>
+		</dict>
+		<key>Frameworks/video_enc.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Ik+xOcrBBRtnhuGVGWUxC3TBa0JzKjqLNGmSrJ2ayLA=
+			</data>
+		</dict>
+		<key>Frameworks/video_enc.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BrA0w4frZI1WI1T/OTKaKJ6YjYsW1FD7rBNwDbI/iSo=
+			</data>
+		</dict>
+		<key>Frameworks/video_enc.framework/video_enc</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			x+tqs6hp+CSaCtDwbey6E+5aZmPbph39VzB1rQM/0rk=
+			</data>
+		</dict>
 		<key>GoogleService-Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -2666,7 +3686,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			gOCUZ7DoOeelRKIpv8g0hyClErn0iGjp9iTWKQnc4Xc=
+			i6b7u3SyjwZGu/qHOfOO5qeqepS030APwfK0RG70U54=
 			</data>
 		</dict>
 		<key>__preview.dylib</key>
@@ -2688,6 +3708,20 @@
 			<key>hash2</key>
 			<data>
 			bS2g2NkwIn1CjB2TY7CtbjoS4sm2jFzilxWKdBL8jDE=
+			</data>
+		</dict>
+		<key>permission_handler_apple_privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zjim17QcQ14leGNxPi+UAvWbW1FNTbevaO31xJk3Ek0=
+			</data>
+		</dict>
+		<key>permission_handler_apple_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ETZWiZY6EZHpaiLgs59i8FuG0NJKvoBAXBpc7vCamxs=
 			</data>
 		</dict>
 	</dict>

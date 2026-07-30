@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../theme/theme_toggle_button.dart';
@@ -136,12 +138,15 @@ class PatientDashboard extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: _SosPulseButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const EmergencyScreen(),
-                      ),
-                    ),
+                    onPressed: () {
+                      _saveSosLocation();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const EmergencyScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -210,6 +215,31 @@ class PatientDashboard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _saveSosLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.deniedForever) return;
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'lastLatitude': pos.latitude,
+          'lastLongitude': pos.longitude,
+          'lastSosTime': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      }
+    } catch (e) {
+      debugPrint('Failed to save SOS location: $e');
+    }
   }
 }
 

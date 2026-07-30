@@ -13,6 +13,8 @@ String authErrorMessage(Object e) {
         return 'No account found with this email.';
       case 'wrong-password':
         return 'Incorrect password. Please try again.';
+      case 'invalid-credential':
+        return 'Incorrect email or password.';
       case 'user-disabled':
         return 'This account has been disabled.';
       case 'too-many-requests':

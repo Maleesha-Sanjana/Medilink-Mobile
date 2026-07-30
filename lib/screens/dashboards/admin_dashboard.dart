@@ -12,6 +12,9 @@ import '../../theme/theme_toggle_button.dart';
 import '../../theme/language_toggle_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../login_screen.dart';
+import '../../models/hospital.dart';
+import '../../services/hospital_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -26,7 +29,7 @@ class _AdminDashboardState extends State<AdminDashboard>
   @override
   void initState() {
     super.initState();
-    _mainTabController = TabController(length: 3, vsync: this);
+    _mainTabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -87,10 +90,11 @@ class _AdminDashboardState extends State<AdminDashboard>
         ],
         bottom: TabBar(
           controller: _mainTabController,
-          tabs: const [
+          tabs: [
             Tab(icon: Icon(Icons.people_alt_rounded), text: 'Employees'),
             Tab(icon: Icon(Icons.airport_shuttle_rounded), text: 'Vehicles'),
             Tab(icon: Icon(Icons.people_rounded), text: 'Patients'),
+            Tab(icon: const Icon(Icons.local_hospital_rounded), text: AppLocalizations.of(context)!.hospitalsTab),
           ],
         ),
         elevation: 0,
@@ -98,7 +102,12 @@ class _AdminDashboardState extends State<AdminDashboard>
       ),
       body: TabBarView(
         controller: _mainTabController,
-        children: [_EmployeesTab(), const _VehiclesTab(), _PatientList()],
+        children: [
+          _EmployeesTab(),
+          const _VehiclesTab(),
+          _PatientList(),
+          const _HospitalsTab(),
+        ],
       ),
     );
   }
@@ -262,7 +271,7 @@ class _VehiclesTab extends StatelessWidget {
             ),
             backgroundColor: Colors.red,
             icon: const Icon(Icons.add_rounded, color: Colors.white),
-            label: const Text(
+            label: Text(
               'Add Vehicle',
               style: TextStyle(
                 color: Colors.white,
@@ -439,7 +448,7 @@ class _VehicleCard extends StatelessWidget {
               await VehicleService().deleteVehicle(vehicle.id);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Vehicle deleted'),
                     backgroundColor: Colors.red,
                   ),
@@ -500,7 +509,7 @@ class _VehicleDialogState extends State<_VehicleDialog> {
   Future<void> _save() async {
     if (_numberCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Vehicle number is required'),
           backgroundColor: Colors.red,
         ),
@@ -1002,7 +1011,7 @@ class _UserCard extends StatelessWidget {
               await UserService().deleteUser(user.uid);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Account deleted'),
                     backgroundColor: Colors.red,
                   ),
@@ -1046,7 +1055,7 @@ class _CreateUserDialogState extends State<_CreateUserDialog> {
   Future<void> _create() async {
     if (_emailCtrl.text.isEmpty || _passCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Email and password are required'),
           backgroundColor: Colors.red,
         ),
@@ -1055,7 +1064,7 @@ class _CreateUserDialogState extends State<_CreateUserDialog> {
     }
     if (_phoneCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Phone number is required'),
           backgroundColor: Colors.red,
         ),
@@ -1064,7 +1073,7 @@ class _CreateUserDialogState extends State<_CreateUserDialog> {
     }
     if (_passCtrl.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Password must be at least 6 characters'),
           backgroundColor: Colors.red,
         ),
@@ -1277,7 +1286,7 @@ class _EditUserDialogState extends State<_EditUserDialog> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Account updated successfully'),
             backgroundColor: Colors.green,
           ),
@@ -1597,7 +1606,7 @@ class _DriverCard extends StatelessWidget {
               await DriverService().deleteDriver(driver.id);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Driver deleted'),
                     backgroundColor: Colors.red,
                   ),
@@ -1657,7 +1666,7 @@ class _DriverDialogState extends State<_DriverDialog> {
         _phoneCtrl.text.isEmpty ||
         _licenseCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Name, phone and license number are required'),
           backgroundColor: Colors.red,
         ),
@@ -1783,3 +1792,450 @@ class _DriverDialogState extends State<_DriverDialog> {
     );
   }
 }
+
+// ── Hospitals Tab ────────────────────────────────────────────────────────────
+
+class _HospitalsTab extends StatelessWidget {
+  const _HospitalsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Stack(
+      children: [
+        StreamBuilder<List<Hospital>>(
+          stream: HospitalService().streamHospitals(),
+          builder: (context, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final hospitals = snap.data ?? [];
+            if (hospitals.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.local_hospital_rounded,
+                      size: 56,
+                      color: Colors.grey.shade400,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      AppLocalizations.of(context)!.noHospitals,
+                      style: TextStyle(
+                        color: Colors.grey.shade500,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+              itemCount: hospitals.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              itemBuilder: (context, i) =>
+                  _HospitalCard(hospital: hospitals[i], isDark: isDark),
+            );
+          },
+        ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton.extended(
+            heroTag: 'hosp_fab',
+            onPressed: () => showDialog(
+              context: context,
+              builder: (_) => const _HospitalDialog(),
+            ),
+            backgroundColor: Colors.blue,
+            icon: const Icon(Icons.add_location_alt_rounded, color: Colors.white),
+            label: Text(
+              AppLocalizations.of(context)!.addHospital,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HospitalCard extends StatelessWidget {
+  final Hospital hospital;
+  final bool isDark;
+  const _HospitalCard({required this.hospital, required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isDark ? const Color(0xFF333333) : const Color(0xFFE8E8E8),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.local_hospital_rounded,
+                  color: Colors.blue,
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      hospital.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    Text(
+                      'Lat: ${hospital.latitude.toStringAsFixed(4)}, Lng: ${hospital.longitude.toStringAsFixed(4)}',
+                      style: const TextStyle(
+                        color: Color(0xFFAAAAAA),
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => _HospitalDialog(hospital: hospital),
+                  );
+                },
+                icon: const Icon(Icons.edit_outlined, size: 16),
+                label: Text('Edit'),
+                style: TextButton.styleFrom(foregroundColor: Colors.blue),
+              ),
+              TextButton.icon(
+                onPressed: () => _confirmDelete(context),
+                icon: const Icon(Icons.delete_outline_rounded, size: 16),
+                label: Text('Delete'),
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.deleteHospital),
+        content: Text(AppLocalizations.of(context)!.deleteHospitalConfirm(hospital.name)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await HospitalService().deleteHospital(hospital.id);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.hospitalDeleted),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HospitalDialog extends StatefulWidget {
+  final Hospital? hospital;
+  const _HospitalDialog({super.key, this.hospital});
+  @override
+  State<_HospitalDialog> createState() => _HospitalDialogState();
+}
+
+class _HospitalDialogState extends State<_HospitalDialog> {
+  final _nameCtrl = TextEditingController();
+  bool _loading = false;
+  Position? _position;
+  final List<String> _availableFeatures = ['X-Ray', 'ICU', 'Trauma Center', 'Cardiology', 'Neurology', 'Burn Unit', 'Maternity'];
+  List<String> _selectedFeatures = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.hospital != null) {
+      _nameCtrl.text = widget.hospital!.name;
+      _position = Position(
+        longitude: widget.hospital!.longitude,
+        latitude: widget.hospital!.latitude,
+        timestamp: DateTime.now(),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+      );
+      _selectedFeatures = List.from(widget.hospital!.features);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchLocation() async {
+    setState(() => _loading = true);
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw 'Location services are disabled.';
+      }
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw 'Location permissions are denied.';
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        throw 'Location permissions are permanently denied.';
+      }
+
+      final pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      setState(() => _position = pos);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _save() async {
+    if (_nameCtrl.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.hospitalNameRequired),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    if (_position == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.fetchLocationFirst),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      if (widget.hospital != null) {
+        await HospitalService().updateHospital(
+          widget.hospital!.id,
+          {
+            'name': _nameCtrl.text.trim(),
+            'latitude': _position!.latitude,
+            'longitude': _position!.longitude,
+            'features': _selectedFeatures,
+          },
+        );
+      } else {
+        await HospitalService().createHospital(
+          Hospital(
+            id: '',
+            name: _nameCtrl.text.trim(),
+            latitude: _position!.latitude,
+            longitude: _position!.longitude,
+            features: _selectedFeatures,
+          ),
+        );
+      }
+      if (mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.hospitalRegistered),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Row(
+        children: [
+          const Icon(Icons.add_location_alt_rounded, color: Colors.blue, size: 22),
+          SizedBox(width: 8),
+          Text(
+            widget.hospital != null ? 'Edit Hospital' : AppLocalizations.of(context)!.registerHospital,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            controller: _nameCtrl,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.hospitalName,
+              prefixIcon: const Icon(Icons.local_hospital_rounded, color: Color(0xFF9FA8DA), size: 20),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+          
+          const SizedBox(height: 16),
+          const Text('Hospital Features', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey)),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _availableFeatures.map((f) {
+              final isSel = _selectedFeatures.contains(f);
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    if (isSel) {
+                      _selectedFeatures.remove(f);
+                    } else {
+                      _selectedFeatures.add(f);
+                    }
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isSel ? Colors.blue.withValues(alpha: 0.1) : Colors.transparent,
+                    border: Border.all(color: isSel ? Colors.blue : Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(f, style: TextStyle(fontSize: 12, color: isSel ? Colors.blue : Colors.grey.shade700)),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          if (_position != null) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.green.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.check_circle_rounded, color: Colors.green),
+                  const SizedBox(height: 4),
+                  Text(AppLocalizations.of(context)!.locationAcquired, style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Lat: ${_position!.latitude.toStringAsFixed(4)}\nLng: ${_position!.longitude.toStringAsFixed(4)}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            ElevatedButton.icon(
+              onPressed: _loading ? null : _fetchLocation,
+              icon: const Icon(Icons.my_location_rounded),
+              label: Text(AppLocalizations.of(context)!.fetchLocation),
+            ),
+          ],
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: _loading ? null : () => Navigator.pop(context),
+          child: Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: _loading ? null : _save,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+          ),
+          child: _loading
+              ? const SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                )
+              : Text(AppLocalizations.of(context)!.register),
+        ),
+      ],
+    );
+  }
+}
+

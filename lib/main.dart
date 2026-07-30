@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
       restorationScopeId: null,
+      builder: (context, child) => child ?? const SplashScreen(),
     );
   }
 }
@@ -89,15 +90,43 @@ class AuthGate extends StatelessWidget {
           return const LoginScreen();
         }
         return FutureBuilder(
-          future: UserService().getUser(snapshot.data!.uid),
+          future: UserService().getOrCreateUser(
+            snapshot.data!.uid,
+            snapshot.data!.email,
+            snapshot.data!.phoneNumber,
+            snapshot.data!.displayName,
+          ),
           builder: (context, userSnap) {
             if (userSnap.connectionState == ConnectionState.waiting) {
               return const Scaffold(
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            final user = userSnap.data;
-            if (user == null) return const LoginScreen();
+            if (userSnap.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Error loading user profile:'),
+                        const SizedBox(height: 10),
+                        Text('${userSnap.error}', style: const TextStyle(color: Colors.red)),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () => FirebaseAuth.instance.signOut(),
+                          child: const Text('Sign Out'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+            
+            final user = userSnap.data!;
+            
             switch (user.role) {
               case 'admin':
                 return const AdminDashboard();

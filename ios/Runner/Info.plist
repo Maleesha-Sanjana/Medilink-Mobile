@@ -21,6 +21,8 @@
 	<string>STJ MediLink needs access to your photos to set a profile picture.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>STJ MediLink needs camera access to take a profile picture.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>STJ MediLink needs microphone access for in-app voice calls with EMT.</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>GIDClientID</key>
@@ -49,6 +51,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

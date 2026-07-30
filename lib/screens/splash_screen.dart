@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
+import 'emt_tracking_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,11 +29,29 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(const Duration(milliseconds: 1500), () {
+        Future.delayed(const Duration(milliseconds: 1500), () async {
           if (!mounted) return;
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const AuthGate()),
-          );
+          
+          final prefs = await SharedPreferences.getInstance();
+          final activeReqId = prefs.getString('active_request_id');
+          final activeReqType = prefs.getString('active_request_type');
+          
+          if (!mounted) return;
+          
+          if (activeReqId != null && activeReqType != null && FirebaseAuth.instance.currentUser != null) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => EmtTrackingScreen(
+                  requestId: activeReqId,
+                  ambulanceType: activeReqType,
+                ),
+              ),
+            );
+          } else {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const AuthGate()),
+            );
+          }
         });
       }
     });

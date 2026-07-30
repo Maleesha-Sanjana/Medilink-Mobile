@@ -54,7 +54,9 @@
   "resetEmailSentDesc": "{email} க்கு கடவுச்சொல் மீட்டமைப்பு இணைப்பை அனுப்பியுள்ளோம். உங்கள் inbox சரிபார்க்கவும்.",
   "@resetEmailSentDesc": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "backToLogin": "உள்நுழைவுக்கு திரும்பவும்",
@@ -67,20 +69,26 @@
   "requestAmbulance": "{type} ஆம்புலன்ஸ் கோரவும்",
   "@requestAmbulance": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "confirmRequest": "கோரிக்கையை உறுதிப்படுத்தவும்",
   "ambulanceType": "வகை: {type} ஆம்புலன்ஸ்",
   "@ambulanceType": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "price": "விலை: {price}",
   "@price": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
   "dispatchMessage": "உங்கள் இடத்திற்கு EMT அனுப்பப்படும்.",
@@ -88,7 +96,9 @@
   "helpOnWay": "🚑 {type} ஆம்புலன்ஸ் கோரப்பட்டது! உதவி வருகிறது.",
   "@helpOnWay": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "basicAmbulance": "அடிப்படை",
@@ -124,11 +134,188 @@
   "selectBloodType": "இரத்த வகை தேர்வு செய்க",
   "medicalNotes": "மருத்துவ குறிப்புகள் / ஒவ்வாமை",
   "medicalNotesHint": "எ.கா. நீரிழிவு, பென்சிலின் ஒவ்வாமை…",
+  "medicalHistory": "மருத்துவ வரலாறு",
+  "medicalHistoryHint": "கடந்தகால நோய்கள், அறுவை சிகிச்சைகள், குடும்ப வரலாறு…",
   "emergencyContact": "அவசர தொடர்பு",
   "contactName": "தொடர்பு பெயர்",
   "contactPhone": "தொடர்பு தொலைபேசி",
   "genderMale": "ஆண்",
   "genderFemale": "பெண்",
   "genderOther": "மற்றவை",
-  "genderPreferNot": "கூற விரும்பவில்லை"
+  "genderPreferNot": "கூற விரும்பவில்லை",
+  "paymentDetails": "கட்டண விவரங்கள்",
+  "cardNumber": "அட்டை எண்",
+  "expiryDate": "காலாவதி தேதி (MM/YY)",
+  "cvv": "CVV",
+  "hospitalsTab": "மருத்துவமனைகள்",
+  "noHospitals": "இன்னும் மருத்துவமனைகள் சேர்க்கப்படவில்லை",
+  "addHospital": "மருத்துவமனையைச் சேர்",
+  "registerHospital": "மருத்துவமனையைப் பதிவு செய்",
+  "hospitalName": "மருத்துவமனை பெயர்",
+  "locationAcquired": "இடம் பெறப்பட்டது",
+  "fetchLocation": "தற்போதைய இடத்தைப் பெறு",
+  "register": "பதிவு செய்",
+  "deleteHospital": "மருத்துவமனையை நீக்கு",
+  "deleteHospitalConfirm": "{name} மருத்துவமனையை நீக்கவா?",
+  "@deleteHospitalConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hospitalRegistered": "மருத்துவமனை வெற்றிகரமாக பதிவு செய்யப்பட்டது!",
+  "fetchLocationFirst": "தயவுசெய்து முதலில் இடத்தைப் பெறவும்",
+  "hospitalNameRequired": "மருத்துவமனை பெயர் தேவை",
+  "hospitalDeleted": "மருத்துவமனை நீக்கப்பட்டது",
+  "selectDestination": "இலக்கைத் தேர்ந்தெடுக்கவும்",
+  "distanceKm": "தூரம்: {distance} கி.மீ",
+  "@distanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "estimatedFare": "மதிப்பிடப்பட்ட கட்டணம்: LKR {fare}",
+  "@estimatedFare": {
+    "placeholders": {
+      "fare": {
+        "type": "String"
+      }
+    }
+  },
+  "startTrip": "பயணத்தைத் தொடங்கு",
+  "arrivingNow": "இப்போது வந்துகொண்டிருக்கிறது",
+  "minAway": "{mins} நிமிடங்களில்",
+  "@minAway": {
+    "placeholders": {
+      "mins": {
+        "type": "String"
+      }
+    }
+  },
+  "mAwayTime": "{meters} மீ தொலைவில் • {timeStr}",
+  "@mAwayTime": {
+    "placeholders": {
+      "meters": {
+        "type": "String"
+      },
+      "timeStr": {
+        "type": "String"
+      }
+    }
+  },
+  "kmAwayTime": "{km} கி.மீ தொலைவில் • {timeStr}",
+  "@kmAwayTime": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "timeStr": {
+        "type": "String"
+      }
+    }
+  },
+  "transportingToHospital": "மருத்துவமனைக்கு கொண்டு செல்லப்படுகிறது!",
+  "emtOnTheWay": "EMT வந்துகொண்டிருக்கிறார்!",
+  "hospital": "மருத்துவமனை",
+  "ambulanceWord": "ஆம்புலன்ஸ்",
+  "enRouteTo": "{hospitalName} நோக்கி செல்கிறது",
+  "@enRouteTo": {
+    "placeholders": {
+      "hospitalName": {
+        "type": "String"
+      }
+    }
+  },
+  "emtAcceptedEnRoute": "EMT ஏற்கப்பட்டது & வழியில்",
+  "hospitalTripFare": "மருத்துவமனை பயணக் கட்டணம்: {price}",
+  "@hospitalTripFare": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "liveLocationUpdating": "நேரடி இருப்பிடம் 5 வினாடிகளுக்கு ஒருமுறை புதுப்பிக்கப்படும்",
+  "waitingForEmtLocation": "EMT இருப்பிடத்திற்காக காத்திருக்கிறது…",
+  "emtHasArrived": "EMT வந்துவிட்டார்!",
+  "emtAssessing": "EMT தற்போது நோயாளியை பரிசோதித்து প্রাথমিক அறிக்கையை நிரப்புகிறார். காத்திருக்கவும்.",
+  "estimatedInitialFare": "மதிப்பிடப்பட்ட ஆரம்ப கட்டணம் (அழைப்பு + EMT பயணம்)",
+  "calculating": "கணக்கிடப்படுகிறது...",
+  "statusPending": "நிலை: நிலுவையில் உள்ளது",
+  "pending": "நிலுவையில்",
+  "pcrTitle": "நோயாளி பராமரிப்பு அறிக்கை",
+  "nicPassport": "அடையாள அட்டை / கடவுச்சீட்டு எண்",
+  "age": "வயது",
+  "bloodGroup": "இரத்த வகை",
+  "contactNo": "தொடர்பு எண்",
+  "guardianNextOfKin": "பாதுகாவலர் / உறவினர்",
+  "relationship": "உறவு",
+  "guardianContactNo": "பாதுகாவலர் தொடர்பு எண்",
+  "idFront": "அடையாள அட்டை முன்",
+  "idBack": "அடையாள அட்டை பின்",
+  "emergencyType": "அவசர வகை",
+  "chiefComplaint": "முக்கிய புகார் / விவரம்",
+  "symptoms": "அறிகுறிகள்",
+  "consciousLevel": "உணர்வு நிலை",
+  "painLevel010": "வலி நிலை (0 - 10)",
+  "aAirway": "A - சுவாசப்பாதை",
+  "airwayManaged": "சுவாசப்பாதை நிர்வகிக்கப்பட்டதா?",
+  "method": "முறை",
+  "bBreathing": "B - சுவாசம்",
+  "respRate": "சுவாச வீதம் (/min)",
+  "spo2": "SpO2 (%)",
+  "breathingAssisted": "சுவாசம் உதவப்பட்டதா?",
+  "cCirculation": "C - சுழற்சி",
+  "pulseMin": "நாடித் துடிப்பு (/min)",
+  "bpMmHg": "இரத்த அழுத்தம் (mmHg)",
+  "capillaryRefill": "Capillary Refill",
+  "bleedingControlled": "இரத்தப்போக்கு கட்டுப்படுத்தப்பட்டதா?",
+  "dDisability": "D - இயலாமை",
+  "gcsScore": "GCS மதிப்பெண்:",
+  "e14": "E (1-4)",
+  "v15": "V (1-5)",
+  "m16": "M (1-6)",
+  "eExposure": "E - வெளிப்பாடு",
+  "temperatureC": "வெப்பநிலை (°C)",
+  "noVitalsRecorded": "இதுவரை உயிர் அறிகுறிகள் பதிவு செய்யப்படவில்லை.",
+  "timePulseBpSpo2": "நேரம்: {time} | நாடி: {pulse} | ர.அ: {bp} | SpO2: {spo2}",
+  "logCurrentVitals": "தற்போதைய உயிர் அறிகுறிகளை பதிவு செய்",
+  "sSignsSymptoms": "S - அறிகுறிகள் மற்றும் அடையாளங்கள்",
+  "aAllergies": "A - ஒவ்வாமை",
+  "mMedications": "M - மருந்துகள்",
+  "pPastMedicalHistory": "P - கடந்தகால மருத்துவ வரலாறு",
+  "lLastMeal": "L - கடைசி உணவு",
+  "eEventsLeading": "E - நோய்/காயத்திற்கு வழிவகுத்த நிகழ்வுகள்",
+  "knownConditions": "அறிந்த மருத்துவ நிலைகள்",
+  "interactiveBodyMapPlaceHolder": "ஊடாடும் உடல் காயம் வரைபடம்",
+  "interactiveBodyMapHint": "(தீக்காயங்கள், எலும்பு முறிவுகள், வீக்கம் போன்றவற்றைச் சேர்க்கத் தட்டவும்)",
+  "airwayManagement": "சுவாசப்பாதை மேலாண்மை",
+  "o2Flow": "O2 ஓட்டம் (L/min)",
+  "cardiovascular": "இருதய அமைப்பு",
+  "immobilization": "அசைவற்றாக்கம்",
+  "medicationGiven": "அளிக்கப்பட்ட மருந்து",
+  "medication": "மருந்து",
+  "dose": "அளவு",
+  "route": "பாதை",
+  "time": "நேரம்",
+  "transportType": "போக்குவரத்து வகை",
+  "departureTime": "புறப்பட்ட நேரம்",
+  "arrivalTimeExt": "வந்தடைந்த நேரம்",
+  "distanceCoveredKm": "கடந்த தூரம் (கிமீ)",
+  "doctorNurseName": "மருத்துவர் / செவிலியர் பெயர்",
+  "handoverTime": "ஒப்படைக்கப்பட்ட நேரம்",
+  "conditionOnArrival": "வந்தடையும் போது நிலை",
+  "handoverNotes": "ஒப்படைப்பு குறிப்புகள்",
+  "submitPcr": "நோயாளி பராமரிப்பு அறிக்கையைச் சமர்ப்பி",
+  "reportSubmitted": "அறிக்கை வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது!",
+  "errorSavingReport": "அறிக்கையைச் சேமிப்பதில் பிழை: {error}",
+
+  "cancelTrip": "பயணத்தை ரத்துசெய்",
+  "cancelTripConfirm": "இந்த அவசர கோரிக்கையை ரத்துசெய்ய உறுதியாக இருக்கிறீர்களா?",
+  "tripCancelled": "பயணம் ரத்துசெய்யப்பட்டது.",
+  "yesCancel": "ஆம், ரத்துசெய்",
+  "noKeep": "இல்லை"
 }

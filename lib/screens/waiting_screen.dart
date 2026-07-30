@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'emt_tracking_screen.dart';
 
 /// Shown after a patient submits an emergency request.
@@ -23,6 +25,7 @@ class _WaitingScreenState extends State<WaitingScreen>
   late AnimationController _pulseCtrl;
   late AnimationController _rotateCtrl;
   late Animation<double> _pulse;
+  bool _hasShownAccepted = false;
 
   @override
   void initState() {
@@ -59,6 +62,82 @@ class _WaitingScreenState extends State<WaitingScreen>
     if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
   }
 
+  bool _isReassigning = false;
+
+  Future<void> _reassignEmt(Map<String, dynamic> data) async {
+    if (_isReassigning) return;
+    _isReassigning = true;
+    
+    try {
+      final rejectedBy = data['rejectedBy'] as List<dynamic>? ?? [];
+      final lat = data['latitude'] as double?;
+      final lng = data['longitude'] as double?;
+      if (lat == null || lng == null) return;
+      
+      final tenMinsAgo = DateTime.now().subtract(const Duration(minutes: 10));
+      final usersSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: 'emt')
+          .get();
+
+      List<Map<String, dynamic>> availableEmts = [];
+      for (var doc in usersSnap.docs) {
+        if (rejectedBy.contains(doc.id)) continue;
+        
+        final uData = doc.data();
+        final lastOnline = uData['lastOnlineAt'] as Timestamp?;
+        if (lastOnline == null || lastOnline.toDate().isBefore(tenMinsAgo)) continue;
+        
+        final eLat = uData['lastLatitude'] as double?;
+        final eLng = uData['lastLongitude'] as double?;
+        if (eLat == null || eLng == null) continue;
+
+        final activeTripSnap = await FirebaseFirestore.instance
+            .collection('emergency_requests')
+            .where('emtUid', isEqualTo: doc.id)
+            .where('status', isEqualTo: 'accepted')
+            .limit(1)
+            .get();
+        if (activeTripSnap.docs.isNotEmpty) continue;
+
+        availableEmts.add({
+          'uid': doc.id,
+          'lat': eLat,
+          'lng': eLng,
+        });
+      }
+
+      String? nextEmtUid;
+      if (availableEmts.isNotEmpty) {
+        final distance = const Distance();
+        availableEmts.sort((a, b) {
+          final distA = distance.as(
+            LengthUnit.Meter,
+            LatLng(lat, lng),
+            LatLng(a['lat'], a['lng']),
+          );
+          final distB = distance.as(
+            LengthUnit.Meter,
+            LatLng(lat, lng),
+            LatLng(b['lat'], b['lng']),
+          );
+          return distA.compareTo(distB);
+        });
+        nextEmtUid = availableEmts.first['uid'] as String;
+      }
+
+      await FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .doc(widget.requestId)
+          .update({
+            'status': nextEmtUid != null ? 'assigned' : 'pending',
+            'assignedEmtUid': nextEmtUid,
+          });
+    } finally {
+      _isReassigning = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -76,10 +155,13 @@ class _WaitingScreenState extends State<WaitingScreen>
           final status = data['status'] as String? ?? 'pending';
 
           // Auto-navigate when accepted
-          if (status == 'accepted') {
+          if (status == 'accepted' && !_hasShownAccepted) {
+            _hasShownAccepted = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) _showAcceptedAndPop(context);
             });
+          } else if (status == 'rejected') {
+            _reassignEmt(data);
           }
 
           return Scaffold(
@@ -233,11 +315,29 @@ class _WaitingScreenState extends State<WaitingScreen>
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
+                                  'Case ID: ${data['caseId'] ?? 'Generating...'}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isDark ? Colors.white70 : Colors.black54,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
                                   'Status: Pending',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.orange.shade600,
                                     fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  'Estimated Fare: ${data['price'] ?? 'Calculating...'}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.green.shade600,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ],
@@ -341,9 +441,15 @@ class _WaitingScreenState extends State<WaitingScreen>
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop(); // close dialog
-                // Replace waiting screen with live tracking screen
+                
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString('active_request_id', widget.requestId);
+                await prefs.setString('active_request_type', widget.ambulanceType);
+                
+                if (context.mounted) {
+                  // Replace waiting screen with live tracking screen
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (_) => EmtTrackingScreen(
@@ -352,6 +458,7 @@ class _WaitingScreenState extends State<WaitingScreen>
                     ),
                   ),
                 );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,

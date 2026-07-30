@@ -28,6 +28,29 @@ class UserService {
     return AppUser.fromMap(uid, doc.data()!);
   }
 
+  // ── Fetch or Create user (if missing) ─────────────────────────────────────
+  Future<AppUser> getOrCreateUser(String uid, String? email, String? phone, String? displayName) async {
+    final doc = await _db.collection('users').doc(uid).get();
+    if (!doc.exists || doc.data() == null) {
+      // Profile missing in Firestore, create a default 'patient' profile
+      await createUser(
+        uid: uid,
+        email: email ?? '',
+        phone: phone,
+        displayName: displayName,
+        role: 'patient',
+      );
+      return AppUser(
+        uid: uid,
+        email: email ?? '',
+        phone: phone,
+        displayName: displayName,
+        role: 'patient',
+      );
+    }
+    return AppUser.fromMap(uid, doc.data()!);
+  }
+
   // ── Update user details ───────────────────────────────────────────────────
   Future<void> updateUser(
     String uid, {

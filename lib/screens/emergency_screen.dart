@@ -1,9 +1,12 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import 'waiting_screen.dart';
 
@@ -19,6 +22,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   LatLng _currentLocation = const LatLng(6.9271, 79.8612);
   bool _locationLoaded = false;
   int _selectedVehicle = 0;
+  double? _estimatedDistanceKm;
 
   @override
   void initState() {
@@ -26,40 +30,50 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     _getLocation();
   }
 
-  List<_AmbulanceType> _buildVehicles(AppLocalizations l) => [
-    _AmbulanceType(
-      name: l.basicAmbulance,
-      icon: Icons.emergency_rounded,
-      capacity: l.capacity2,
-      price: 'LKR 3,500',
-      stars: '98.4',
-      color: const Color(0xFF2D3A8C),
-    ),
-    _AmbulanceType(
-      name: l.advancedAmbulance,
-      icon: Icons.local_hospital_rounded,
-      capacity: l.capacity1,
-      price: 'LKR 6,200',
-      stars: '112.1',
-      color: Colors.red,
-    ),
-    _AmbulanceType(
-      name: l.icuAmbulance,
-      icon: Icons.monitor_heart_rounded,
-      capacity: l.capacity1,
-      price: 'LKR 12,800',
-      stars: '87.3',
-      color: Colors.orange,
-    ),
-    _AmbulanceType(
-      name: l.neonatalAmbulance,
-      icon: Icons.child_care_rounded,
-      capacity: l.capacityInfant,
-      price: 'LKR 9,500',
-      stars: '74.6',
-      color: Colors.teal,
-    ),
-  ];
+  List<_AmbulanceType> _buildVehicles(AppLocalizations l) {
+    final dist = _estimatedDistanceKm ?? 8.0;
+    final basicFare = 5000.0 + (dist * 200.0);
+    final advancedFare = basicFare * 1.5;
+    final icuFare = basicFare * 2.0;
+    final neonatalFare = basicFare * 1.8;
+    
+    final fmt = NumberFormat('#,##0');
+
+    return [
+      _AmbulanceType(
+        name: l.basicAmbulance,
+        icon: Icons.emergency_rounded,
+        capacity: l.capacity2,
+        price: 'LKR ${fmt.format(basicFare)}',
+        stars: '98.4',
+        color: const Color(0xFF2D3A8C),
+      ),
+      _AmbulanceType(
+        name: l.advancedAmbulance,
+        icon: Icons.local_hospital_rounded,
+        capacity: l.capacity1,
+        price: 'LKR ${fmt.format(advancedFare)}',
+        stars: '112.1',
+        color: Colors.red,
+      ),
+      _AmbulanceType(
+        name: l.icuAmbulance,
+        icon: Icons.monitor_heart_rounded,
+        capacity: l.capacity1,
+        price: 'LKR ${fmt.format(icuFare)}',
+        stars: '87.3',
+        color: Colors.orange,
+      ),
+      _AmbulanceType(
+        name: l.neonatalAmbulance,
+        icon: Icons.child_care_rounded,
+        capacity: l.capacityInfant,
+        price: 'LKR ${fmt.format(neonatalFare)}',
+        stars: '74.6',
+        color: Colors.teal,
+      ),
+    ];
+  }
 
   Future<void> _getLocation() async {
     try {
@@ -78,8 +92,66 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         _currentLocation = LatLng(pos.latitude, pos.longitude);
         _locationLoaded = true;
       });
-      _mapController.move(_currentLocation, 15);
-    } catch (_) {}
+      _mapController.move(_currentLocation, 15.0);
+      _calculateDistanceToEmt();
+    } catch (e) {
+      debugPrint('Location error: $e');
+    }
+  }
+
+  Future<void> _calculateDistanceToEmt() async {
+    try {
+      final usersSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: 'emt')
+          .get();
+      
+      final tenMinsAgo = DateTime.now().subtract(const Duration(minutes: 10));
+      
+      List<Map<String, dynamic>> availableEmts = [];
+      for (var doc in usersSnap.docs) {
+        final data = doc.data();
+        final lastLat = data['lastLatitude'];
+        final lastLng = data['lastLongitude'];
+        final lastOnline = data['lastOnlineAt'] as Timestamp?;
+        
+        if (lastLat == null || lastLng == null || lastOnline == null) continue;
+        if (lastOnline.toDate().isBefore(tenMinsAgo)) continue;
+        
+        final activeTripSnap = await FirebaseFirestore.instance
+            .collection('emergency_requests')
+            .where('emtUid', isEqualTo: doc.id)
+            .where('status', isEqualTo: 'accepted')
+            .limit(1)
+            .get();
+        if (activeTripSnap.docs.isNotEmpty) continue;
+        
+        availableEmts.add({
+          'lat': lastLat,
+          'lng': lastLng,
+        });
+      }
+      
+      if (availableEmts.isEmpty) {
+        if (mounted) setState(() => _estimatedDistanceKm = 8.0);
+        return;
+      }
+      
+      final distance = const Distance();
+      double minD = double.infinity;
+      for (var emt in availableEmts) {
+        final d = distance.as(
+          LengthUnit.Meter,
+          _currentLocation,
+          LatLng(emt['lat'], emt['lng']),
+        );
+        if (d < minD) minD = d;
+      }
+      
+      if (mounted) setState(() => _estimatedDistanceKm = minD / 1000.0);
+    } catch (_) {
+      if (mounted) setState(() => _estimatedDistanceKm = 8.0);
+    }
   }
 
   @override
@@ -418,18 +490,30 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   ) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
+      final caseId = 'CASE-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}-${Random().nextInt(9999).toString().padLeft(4, '0')}';
+      
+      String? assignedEmtUid = await _getNearestAvailableEmt();
+
       final doc = await FirebaseFirestore.instance
           .collection('emergency_requests')
           .add({
+            'caseId': caseId,
             'uid': user?.uid,
             'patientName': user?.displayName ?? user?.email ?? 'Patient',
             'ambulanceType': v.name,
             'price': v.price,
             'latitude': _currentLocation.latitude,
             'longitude': _currentLocation.longitude,
-            'status': 'pending',
+            'status': assignedEmtUid != null ? 'assigned' : 'pending',
+            'assignedEmtUid': assignedEmtUid,
+            'rejectedBy': [],
             'createdAt': FieldValue.serverTimestamp(),
           });
+      
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('active_request_id', doc.id);
+      await prefs.setString('active_request_type', v.name);
+
       if (context.mounted) {
         Navigator.push(
           context,
@@ -449,6 +533,61 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         );
       }
     }
+  }
+
+  Future<String?> _getNearestAvailableEmt({List<dynamic> rejectedBy = const []}) async {
+    final tenMinsAgo = DateTime.now().subtract(const Duration(minutes: 10));
+    final usersSnap = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'emt')
+        .get();
+
+    List<Map<String, dynamic>> availableEmts = [];
+    for (var doc in usersSnap.docs) {
+      if (rejectedBy.contains(doc.id)) continue;
+      
+      final data = doc.data();
+      final lastOnline = data['lastOnlineAt'] as Timestamp?;
+      if (lastOnline == null || lastOnline.toDate().isBefore(tenMinsAgo)) continue;
+      
+      final lat = data['lastLatitude'] as double?;
+      final lng = data['lastLongitude'] as double?;
+      if (lat == null || lng == null) continue;
+
+      // Check if EMT is currently active on a trip
+      final activeTripSnap = await FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .where('emtUid', isEqualTo: doc.id)
+          .where('status', isEqualTo: 'accepted')
+          .limit(1)
+          .get();
+      if (activeTripSnap.docs.isNotEmpty) continue;
+
+      availableEmts.add({
+        'uid': doc.id,
+        'lat': lat,
+        'lng': lng,
+      });
+    }
+
+    if (availableEmts.isEmpty) return null;
+
+    final distance = const Distance();
+    availableEmts.sort((a, b) {
+      final distA = distance.as(
+        LengthUnit.Meter,
+        _currentLocation,
+        LatLng(a['lat'], a['lng']),
+      );
+      final distB = distance.as(
+        LengthUnit.Meter,
+        _currentLocation,
+        LatLng(b['lat'], b['lng']),
+      );
+      return distA.compareTo(distB);
+    });
+
+    return availableEmts.first['uid'] as String;
   }
 }
 

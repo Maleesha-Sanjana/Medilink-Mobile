@@ -319,6 +319,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicalNotesHint => 'e.g. Diabetic, allergic to penicillin…';
 
   @override
+  String get medicalHistory => 'Medical History';
+
+  @override
+  String get medicalHistoryHint => 'Past illnesses, surgeries, family history…';
+
+  @override
   String get emergencyContact => 'Emergency Contact';
 
   @override
@@ -338,4 +344,365 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genderPreferNot => 'Prefer not to say';
+
+  @override
+  String get paymentDetails => 'Payment Details';
+
+  @override
+  String get cardNumber => 'Card Number';
+
+  @override
+  String get expiryDate => 'Expiry Date (MM/YY)';
+
+  @override
+  String get cvv => 'CVV';
+
+  @override
+  String get hospitalsTab => 'Hospitals';
+
+  @override
+  String get noHospitals => 'No hospitals added yet';
+
+  @override
+  String get addHospital => 'Add Hospital';
+
+  @override
+  String get registerHospital => 'Register Hospital';
+
+  @override
+  String get hospitalName => 'Hospital Name';
+
+  @override
+  String get locationAcquired => 'Location Acquired';
+
+  @override
+  String get fetchLocation => 'Fetch Current Location';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get deleteHospital => 'Delete Hospital';
+
+  @override
+  String deleteHospitalConfirm(String name) {
+    return 'Delete hospital $name?';
+  }
+
+  @override
+  String get hospitalRegistered => 'Hospital registered successfully!';
+
+  @override
+  String get fetchLocationFirst => 'Please fetch the location first';
+
+  @override
+  String get hospitalNameRequired => 'Hospital name is required';
+
+  @override
+  String get hospitalDeleted => 'Hospital deleted';
+
+  @override
+  String get selectDestination => 'Select Destination';
+
+  @override
+  String distanceKm(String distance) {
+    return 'Distance: $distance km';
+  }
+
+  @override
+  String estimatedFare(String fare) {
+    return 'Estimated Fare: $fare';
+  }
+
+  @override
+  String get startTrip => 'Start Trip';
+
+  @override
+  String get arrivingNow => 'Arriving now';
+
+  @override
+  String minAway(String mins) {
+    return '$mins min away';
+  }
+
+  @override
+  String mAwayTime(String meters, String timeStr) {
+    return '$meters m away • $timeStr';
+  }
+
+  @override
+  String kmAwayTime(String km, String timeStr) {
+    return '$km km away • $timeStr';
+  }
+
+  @override
+  String get transportingToHospital => 'Transporting to Hospital!';
+
+  @override
+  String get emtOnTheWay => 'EMT is on the way!';
+
+  @override
+  String get hospital => 'Hospital';
+
+  @override
+  String get ambulanceWord => 'Ambulance';
+
+  @override
+  String enRouteTo(String hospitalName) {
+    return 'En Route to $hospitalName';
+  }
+
+  @override
+  String get emtAcceptedEnRoute => 'EMT Accepted & En Route';
+
+  @override
+  String hospitalTripFare(String price) {
+    return 'Hospital Trip Fare: $price';
+  }
+
+  @override
+  String get liveLocationUpdating => 'Live location updating every 5s';
+
+  @override
+  String get waitingForEmtLocation => 'Waiting for EMT location…';
+
+  @override
+  String get emtHasArrived => 'EMT Has Arrived!';
+
+  @override
+  String get emtAssessing =>
+      'The EMT is currently assessing the patient and filling out the initial Patient Care Report. Please stand by.';
+
+  @override
+  String get estimatedInitialFare =>
+      'Estimated Initial Fare (Callout + EMT Travel)';
+
+  @override
+  String get calculating => 'Calculating...';
+
+  @override
+  String get statusPending => 'Status: Pending';
+
+  @override
+  String get pending => 'PENDING';
+
+  @override
+  String get pcrTitle => 'Patient Care Report';
+
+  @override
+  String get nicPassport => 'NIC / Passport No.';
+
+  @override
+  String get age => 'Age';
+
+  @override
+  String get bloodGroup => 'Blood Group';
+
+  @override
+  String get contactNo => 'Contact No.';
+
+  @override
+  String get guardianNextOfKin => 'Guardian / Next of Kin';
+
+  @override
+  String get relationship => 'Relationship';
+
+  @override
+  String get guardianContactNo => 'Guardian Contact No.';
+
+  @override
+  String get idFront => 'ID Front';
+
+  @override
+  String get idBack => 'ID Back';
+
+  @override
+  String get emergencyType => 'Emergency Type';
+
+  @override
+  String get chiefComplaint => 'Chief Complaint / Description';
+
+  @override
+  String get symptoms => 'Symptoms';
+
+  @override
+  String get consciousLevel => 'Conscious Level';
+
+  @override
+  String get painLevel010 => 'Pain Level (0 - 10)';
+
+  @override
+  String get aAirway => 'A - Airway';
+
+  @override
+  String get airwayManaged => 'Airway Managed?';
+
+  @override
+  String get method => 'Method';
+
+  @override
+  String get bBreathing => 'B - Breathing';
+
+  @override
+  String get respRate => 'Resp. Rate (/min)';
+
+  @override
+  String get spo2 => 'SpO2 (%)';
+
+  @override
+  String get breathingAssisted => 'Breathing Assisted?';
+
+  @override
+  String get cCirculation => 'C - Circulation';
+
+  @override
+  String get pulseMin => 'Pulse (/min)';
+
+  @override
+  String get bpMmHg => 'BP (mmHg)';
+
+  @override
+  String get capillaryRefill => 'Capillary Refill';
+
+  @override
+  String get bleedingControlled => 'Bleeding Controlled?';
+
+  @override
+  String get dDisability => 'D - Disability';
+
+  @override
+  String get gcsScore => 'GCS Score:';
+
+  @override
+  String get e14 => 'E (1-4)';
+
+  @override
+  String get v15 => 'V (1-5)';
+
+  @override
+  String get m16 => 'M (1-6)';
+
+  @override
+  String get eExposure => 'E - Exposure';
+
+  @override
+  String get temperatureC => 'Temperature (°C)';
+
+  @override
+  String get noVitalsRecorded => 'No vital signs recorded yet.';
+
+  @override
+  String timePulseBpSpo2(String time, String pulse, String bp, String spo2) {
+    return 'Time: $time | Pulse: $pulse | BP: $bp | SpO2: $spo2';
+  }
+
+  @override
+  String get logCurrentVitals => 'Log Current Vitals';
+
+  @override
+  String get sSignsSymptoms => 'S - Signs & Symptoms';
+
+  @override
+  String get aAllergies => 'A - Allergies';
+
+  @override
+  String get mMedications => 'M - Medications';
+
+  @override
+  String get pPastMedicalHistory => 'P - Past Medical History';
+
+  @override
+  String get lLastMeal => 'L - Last Meal';
+
+  @override
+  String get eEventsLeading => 'E - Events Leading to Illness/Injury';
+
+  @override
+  String get knownConditions => 'Known Conditions';
+
+  @override
+  String get interactiveBodyMapPlaceHolder =>
+      'Interactive Body Injury Map Placeholder';
+
+  @override
+  String get interactiveBodyMapHint =>
+      '(Tap to add markers for burns, fractures, swelling, etc.)';
+
+  @override
+  String get airwayManagement => 'AIRWAY MANAGEMENT';
+
+  @override
+  String get o2Flow => 'O2 Flow (L/min)';
+
+  @override
+  String get cardiovascular => 'CARDIOVASCULAR';
+
+  @override
+  String get immobilization => 'IMMOBILIZATION';
+
+  @override
+  String get medicationGiven => 'MEDICATION GIVEN';
+
+  @override
+  String get medication => 'Medication';
+
+  @override
+  String get dose => 'Dose';
+
+  @override
+  String get route => 'Route';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String get transportType => 'Transport Type';
+
+  @override
+  String get departureTime => 'Departure Time';
+
+  @override
+  String get arrivalTimeExt => 'Arrival Time (Ext.)';
+
+  @override
+  String get distanceCoveredKm => 'Distance Covered (km)';
+
+  @override
+  String get doctorNurseName => 'Doctor / Nurse Name';
+
+  @override
+  String get handoverTime => 'Handover Time';
+
+  @override
+  String get conditionOnArrival => 'Condition on Arrival';
+
+  @override
+  String get handoverNotes => 'Handover Notes';
+
+  @override
+  String get submitPcr => 'SUBMIT PATIENT CARE REPORT';
+
+  @override
+  String get reportSubmitted => 'Report submitted successfully!';
+
+  @override
+  String errorSavingReport(String error) {
+    return 'Error saving report: $error';
+  }
+
+  @override
+  String get cancelTrip => 'Cancel Trip';
+
+  @override
+  String get cancelTripConfirm =>
+      'Are you sure you want to cancel this emergency request?';
+
+  @override
+  String get tripCancelled => 'The trip has been cancelled.';
+
+  @override
+  String get yesCancel => 'Yes, Cancel';
+
+  @override
+  String get noKeep => 'No, Keep';
 }

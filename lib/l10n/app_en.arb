@@ -54,7 +54,9 @@
   "resetEmailSentDesc": "We''ve sent a password reset link to {email}. Check your inbox and follow the instructions.",
   "@resetEmailSentDesc": {
     "placeholders": {
-      "email": { "type": "String" }
+      "email": {
+        "type": "String"
+      }
     }
   },
   "backToLogin": "Back to Login",
@@ -67,20 +69,26 @@
   "requestAmbulance": "Request {type} EMT",
   "@requestAmbulance": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "confirmRequest": "Confirm Request",
   "ambulanceType": "Type: {type} EMT",
   "@ambulanceType": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "price": "Price: {price}",
   "@price": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
   "dispatchMessage": "An EMT will be dispatched to your location.",
@@ -88,7 +96,9 @@
   "helpOnWay": "🚑 {type} EMT requested! Help is on the way.",
   "@helpOnWay": {
     "placeholders": {
-      "type": { "type": "String" }
+      "type": {
+        "type": "String"
+      }
     }
   },
   "basicAmbulance": "Basic",
@@ -124,11 +134,211 @@
   "selectBloodType": "Select blood type",
   "medicalNotes": "Medical Notes / Allergies",
   "medicalNotesHint": "e.g. Diabetic, allergic to penicillin…",
+  "medicalHistory": "Medical History",
+  "medicalHistoryHint": "Past illnesses, surgeries, family history…",
   "emergencyContact": "Emergency Contact",
   "contactName": "Contact Name",
   "contactPhone": "Contact Phone",
   "genderMale": "Male",
   "genderFemale": "Female",
   "genderOther": "Other",
-  "genderPreferNot": "Prefer not to say"
+  "genderPreferNot": "Prefer not to say",
+  "paymentDetails": "Payment Details",
+  "cardNumber": "Card Number",
+  "expiryDate": "Expiry Date (MM/YY)",
+  "cvv": "CVV",
+  "hospitalsTab": "Hospitals",
+  "noHospitals": "No hospitals added yet",
+  "addHospital": "Add Hospital",
+  "registerHospital": "Register Hospital",
+  "hospitalName": "Hospital Name",
+  "locationAcquired": "Location Acquired",
+  "fetchLocation": "Fetch Current Location",
+  "register": "Register",
+  "deleteHospital": "Delete Hospital",
+  "deleteHospitalConfirm": "Delete hospital {name}?",
+  "@deleteHospitalConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "hospitalRegistered": "Hospital registered successfully!",
+  "fetchLocationFirst": "Please fetch the location first",
+  "hospitalNameRequired": "Hospital name is required",
+  "hospitalDeleted": "Hospital deleted",
+  "selectDestination": "Select Destination",
+  "distanceKm": "Distance: {distance} km",
+  "@distanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "estimatedFare": "Estimated Fare: {fare}",
+  "@estimatedFare": {
+    "placeholders": {
+      "fare": {
+        "type": "String"
+      }
+    }
+  },
+  "startTrip": "Start Trip",
+  "arrivingNow": "Arriving now",
+  "minAway": "{mins} min away",
+  "@minAway": {
+    "placeholders": {
+      "mins": {
+        "type": "String"
+      }
+    }
+  },
+  "mAwayTime": "{meters} m away • {timeStr}",
+  "@mAwayTime": {
+    "placeholders": {
+      "meters": {
+        "type": "String"
+      },
+      "timeStr": {
+        "type": "String"
+      }
+    }
+  },
+  "kmAwayTime": "{km} km away • {timeStr}",
+  "@kmAwayTime": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "timeStr": {
+        "type": "String"
+      }
+    }
+  },
+  "transportingToHospital": "Transporting to Hospital!",
+  "emtOnTheWay": "EMT is on the way!",
+  "hospital": "Hospital",
+  "ambulanceWord": "Ambulance",
+  "enRouteTo": "En Route to {hospitalName}",
+  "@enRouteTo": {
+    "placeholders": {
+      "hospitalName": {
+        "type": "String"
+      }
+    }
+  },
+  "emtAcceptedEnRoute": "EMT Accepted & En Route",
+  "hospitalTripFare": "Hospital Trip Fare: {price}",
+  "@hospitalTripFare": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "liveLocationUpdating": "Live location updating every 5s",
+  "waitingForEmtLocation": "Waiting for EMT location…",
+  "emtHasArrived": "EMT Has Arrived!",
+  "emtAssessing": "The EMT is currently assessing the patient and filling out the initial Patient Care Report. Please stand by.",
+  "estimatedInitialFare": "Estimated Initial Fare (Callout + EMT Travel)",
+  "calculating": "Calculating...",
+  "statusPending": "Status: Pending",
+  "pending": "PENDING",
+  "pcrTitle": "Patient Care Report",
+  "nicPassport": "NIC / Passport No.",
+  "age": "Age",
+  "bloodGroup": "Blood Group",
+  "contactNo": "Contact No.",
+  "guardianNextOfKin": "Guardian / Next of Kin",
+  "relationship": "Relationship",
+  "guardianContactNo": "Guardian Contact No.",
+  "idFront": "ID Front",
+  "idBack": "ID Back",
+  "emergencyType": "Emergency Type",
+  "chiefComplaint": "Chief Complaint / Description",
+  "symptoms": "Symptoms",
+  "consciousLevel": "Conscious Level",
+  "painLevel010": "Pain Level (0 - 10)",
+  "aAirway": "A - Airway",
+  "airwayManaged": "Airway Managed?",
+  "method": "Method",
+  "bBreathing": "B - Breathing",
+  "respRate": "Resp. Rate (/min)",
+  "spo2": "SpO2 (%)",
+  "breathingAssisted": "Breathing Assisted?",
+  "cCirculation": "C - Circulation",
+  "pulseMin": "Pulse (/min)",
+  "bpMmHg": "BP (mmHg)",
+  "capillaryRefill": "Capillary Refill",
+  "bleedingControlled": "Bleeding Controlled?",
+  "dDisability": "D - Disability",
+  "gcsScore": "GCS Score:",
+  "e14": "E (1-4)",
+  "v15": "V (1-5)",
+  "m16": "M (1-6)",
+  "eExposure": "E - Exposure",
+  "temperatureC": "Temperature (°C)",
+  "noVitalsRecorded": "No vital signs recorded yet.",
+  "timePulseBpSpo2": "Time: {time} | Pulse: {pulse} | BP: {bp} | SpO2: {spo2}",
+  "@timePulseBpSpo2": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "pulse": {
+        "type": "String"
+      },
+      "bp": {
+        "type": "String"
+      },
+      "spo2": {
+        "type": "String"
+      }
+    }
+  },
+  "logCurrentVitals": "Log Current Vitals",
+  "sSignsSymptoms": "S - Signs & Symptoms",
+  "aAllergies": "A - Allergies",
+  "mMedications": "M - Medications",
+  "pPastMedicalHistory": "P - Past Medical History",
+  "lLastMeal": "L - Last Meal",
+  "eEventsLeading": "E - Events Leading to Illness/Injury",
+  "knownConditions": "Known Conditions",
+  "interactiveBodyMapPlaceHolder": "Interactive Body Injury Map Placeholder",
+  "interactiveBodyMapHint": "(Tap to add markers for burns, fractures, swelling, etc.)",
+  "airwayManagement": "AIRWAY MANAGEMENT",
+  "o2Flow": "O2 Flow (L/min)",
+  "cardiovascular": "CARDIOVASCULAR",
+  "immobilization": "IMMOBILIZATION",
+  "medicationGiven": "MEDICATION GIVEN",
+  "medication": "Medication",
+  "dose": "Dose",
+  "route": "Route",
+  "time": "Time",
+  "transportType": "Transport Type",
+  "departureTime": "Departure Time",
+  "arrivalTimeExt": "Arrival Time (Ext.)",
+  "distanceCoveredKm": "Distance Covered (km)",
+  "doctorNurseName": "Doctor / Nurse Name",
+  "handoverTime": "Handover Time",
+  "conditionOnArrival": "Condition on Arrival",
+  "handoverNotes": "Handover Notes",
+  "submitPcr": "SUBMIT PATIENT CARE REPORT",
+  "reportSubmitted": "Report submitted successfully!",
+  "errorSavingReport": "Error saving report: {error}",
+  "@errorSavingReport": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "cancelTrip": "Cancel Trip",
+  "cancelTripConfirm": "Are you sure you want to cancel this emergency request?",
+  "tripCancelled": "The trip has been cancelled.",
+  "yesCancel": "Yes, Cancel",
+  "noKeep": "No, Keep"
 }

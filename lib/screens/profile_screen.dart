@@ -25,6 +25,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _emergNameCtrl = TextEditingController();
   final _emergPhoneCtrl = TextEditingController();
   final _medNotesCtrl = TextEditingController();
+  final _medHistoryCtrl = TextEditingController();
+  
+  // Payment Controllers
+  final _cardNumCtrl = TextEditingController();
+  final _expiryCtrl = TextEditingController();
+  final _cvvCtrl = TextEditingController();
 
   // Dropdown values
   String? _gender;
@@ -71,6 +77,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _emergNameCtrl.text = d['emergencyName'] ?? '';
         _emergPhoneCtrl.text = d['emergencyPhone'] ?? '';
         _medNotesCtrl.text = d['medicalNotes'] ?? '';
+        _medHistoryCtrl.text = d['medicalHistory'] ?? '';
+        _cardNumCtrl.text = d['cardNumber'] ?? '';
+        _expiryCtrl.text = d['expiryDate'] ?? '';
+        _cvvCtrl.text = d['cvv'] ?? '';
         _gender =
             [
               'Male',
@@ -220,6 +230,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'emergencyName': _emergNameCtrl.text.trim(),
             'emergencyPhone': _emergPhoneCtrl.text.trim(),
             'medicalNotes': _medNotesCtrl.text.trim(),
+            'medicalHistory': _medHistoryCtrl.text.trim(),
+            'cardNumber': _cardNumCtrl.text.trim(),
+            'expiryDate': _expiryCtrl.text.trim(),
+            'cvv': _cvvCtrl.text.trim(),
           });
       await _user.updateDisplayName(_nameCtrl.text.trim());
       if (mounted) {
@@ -250,6 +264,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _emergNameCtrl.dispose();
     _emergPhoneCtrl.dispose();
     _medNotesCtrl.dispose();
+    _medHistoryCtrl.dispose();
+    _cardNumCtrl.dispose();
+    _expiryCtrl.dispose();
+    _cvvCtrl.dispose();
     super.dispose();
   }
 
@@ -536,6 +554,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       enabled: _editing,
                     ),
                   ),
+                  const SizedBox(height: 14),
+                  // Medical history
+                  _FieldLabel(label: l.medicalHistory, tc: tc),
+                  const SizedBox(height: 6),
+                  TextField(
+                    controller: _medHistoryCtrl,
+                    enabled: _editing,
+                    maxLines: 3,
+                    style: TextStyle(fontSize: 15, color: tc),
+                    decoration: _fieldDeco(
+                      icon: Icons.history_outlined,
+                      hint: l.medicalHistoryHint,
+                      fill: fill,
+                      border: border,
+                      enabled: _editing,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -566,6 +601,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     border: border,
                     tc: tc,
                     keyboard: TextInputType.phone,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // ── Section: Payment Details ────────────────────────
+            _SectionHeader(title: l.paymentDetails, isDark: isDark),
+            const SizedBox(height: 12),
+            _Card(
+              isDark: isDark,
+              child: Column(
+                children: [
+                  _buildField(
+                    label: l.cardNumber,
+                    ctrl: _cardNumCtrl,
+                    icon: Icons.credit_card_outlined,
+                    fill: fill,
+                    border: border,
+                    tc: tc,
+                    keyboard: TextInputType.number,
+                  ),
+                  const SizedBox(height: 14),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildField(
+                          label: l.expiryDate,
+                          ctrl: _expiryCtrl,
+                          icon: Icons.date_range_outlined,
+                          fill: fill,
+                          border: border,
+                          tc: tc,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: _buildField(
+                          label: l.cvv,
+                          ctrl: _cvvCtrl,
+                          icon: Icons.security_outlined,
+                          fill: fill,
+                          border: border,
+                          tc: tc,
+                          keyboard: TextInputType.number,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

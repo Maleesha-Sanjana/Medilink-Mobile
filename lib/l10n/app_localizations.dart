@@ -694,6 +694,18 @@ abstract class AppLocalizations {
   /// **'e.g. Diabetic, allergic to penicillin…'**
   String get medicalNotesHint;
 
+  /// No description provided for @medicalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical History'**
+  String get medicalHistory;
+
+  /// No description provided for @medicalHistoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Past illnesses, surgeries, family history…'**
+  String get medicalHistoryHint;
+
   /// No description provided for @emergencyContact.
   ///
   /// In en, this message translates to:
@@ -735,6 +747,678 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Prefer not to say'**
   String get genderPreferNot;
+
+  /// No description provided for @paymentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Details'**
+  String get paymentDetails;
+
+  /// No description provided for @cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Number'**
+  String get cardNumber;
+
+  /// No description provided for @expiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry Date (MM/YY)'**
+  String get expiryDate;
+
+  /// No description provided for @cvv.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get cvv;
+
+  /// No description provided for @hospitalsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospitals'**
+  String get hospitalsTab;
+
+  /// No description provided for @noHospitals.
+  ///
+  /// In en, this message translates to:
+  /// **'No hospitals added yet'**
+  String get noHospitals;
+
+  /// No description provided for @addHospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Hospital'**
+  String get addHospital;
+
+  /// No description provided for @registerHospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Hospital'**
+  String get registerHospital;
+
+  /// No description provided for @hospitalName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital Name'**
+  String get hospitalName;
+
+  /// No description provided for @locationAcquired.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Acquired'**
+  String get locationAcquired;
+
+  /// No description provided for @fetchLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch Current Location'**
+  String get fetchLocation;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @deleteHospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Hospital'**
+  String get deleteHospital;
+
+  /// No description provided for @deleteHospitalConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete hospital {name}?'**
+  String deleteHospitalConfirm(String name);
+
+  /// No description provided for @hospitalRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital registered successfully!'**
+  String get hospitalRegistered;
+
+  /// No description provided for @fetchLocationFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fetch the location first'**
+  String get fetchLocationFirst;
+
+  /// No description provided for @hospitalNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital name is required'**
+  String get hospitalNameRequired;
+
+  /// No description provided for @hospitalDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital deleted'**
+  String get hospitalDeleted;
+
+  /// No description provided for @selectDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Destination'**
+  String get selectDestination;
+
+  /// No description provided for @distanceKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance: {distance} km'**
+  String distanceKm(String distance);
+
+  /// No description provided for @estimatedFare.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Fare: {fare}'**
+  String estimatedFare(String fare);
+
+  /// No description provided for @startTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Trip'**
+  String get startTrip;
+
+  /// No description provided for @arrivingNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Arriving now'**
+  String get arrivingNow;
+
+  /// No description provided for @minAway.
+  ///
+  /// In en, this message translates to:
+  /// **'{mins} min away'**
+  String minAway(String mins);
+
+  /// No description provided for @mAwayTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{meters} m away • {timeStr}'**
+  String mAwayTime(String meters, String timeStr);
+
+  /// No description provided for @kmAwayTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km away • {timeStr}'**
+  String kmAwayTime(String km, String timeStr);
+
+  /// No description provided for @transportingToHospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Transporting to Hospital!'**
+  String get transportingToHospital;
+
+  /// No description provided for @emtOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'EMT is on the way!'**
+  String get emtOnTheWay;
+
+  /// No description provided for @hospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital'**
+  String get hospital;
+
+  /// No description provided for @ambulanceWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Ambulance'**
+  String get ambulanceWord;
+
+  /// No description provided for @enRouteTo.
+  ///
+  /// In en, this message translates to:
+  /// **'En Route to {hospitalName}'**
+  String enRouteTo(String hospitalName);
+
+  /// No description provided for @emtAcceptedEnRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'EMT Accepted & En Route'**
+  String get emtAcceptedEnRoute;
+
+  /// No description provided for @hospitalTripFare.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital Trip Fare: {price}'**
+  String hospitalTripFare(String price);
+
+  /// No description provided for @liveLocationUpdating.
+  ///
+  /// In en, this message translates to:
+  /// **'Live location updating every 5s'**
+  String get liveLocationUpdating;
+
+  /// No description provided for @waitingForEmtLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for EMT location…'**
+  String get waitingForEmtLocation;
+
+  /// No description provided for @emtHasArrived.
+  ///
+  /// In en, this message translates to:
+  /// **'EMT Has Arrived!'**
+  String get emtHasArrived;
+
+  /// No description provided for @emtAssessing.
+  ///
+  /// In en, this message translates to:
+  /// **'The EMT is currently assessing the patient and filling out the initial Patient Care Report. Please stand by.'**
+  String get emtAssessing;
+
+  /// No description provided for @estimatedInitialFare.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Initial Fare (Callout + EMT Travel)'**
+  String get estimatedInitialFare;
+
+  /// No description provided for @calculating.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating...'**
+  String get calculating;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: Pending'**
+  String get statusPending;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'PENDING'**
+  String get pending;
+
+  /// No description provided for @pcrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient Care Report'**
+  String get pcrTitle;
+
+  /// No description provided for @nicPassport.
+  ///
+  /// In en, this message translates to:
+  /// **'NIC / Passport No.'**
+  String get nicPassport;
+
+  /// No description provided for @age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get age;
+
+  /// No description provided for @bloodGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Group'**
+  String get bloodGroup;
+
+  /// No description provided for @contactNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact No.'**
+  String get contactNo;
+
+  /// No description provided for @guardianNextOfKin.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian / Next of Kin'**
+  String get guardianNextOfKin;
+
+  /// No description provided for @relationship.
+  ///
+  /// In en, this message translates to:
+  /// **'Relationship'**
+  String get relationship;
+
+  /// No description provided for @guardianContactNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian Contact No.'**
+  String get guardianContactNo;
+
+  /// No description provided for @idFront.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Front'**
+  String get idFront;
+
+  /// No description provided for @idBack.
+  ///
+  /// In en, this message translates to:
+  /// **'ID Back'**
+  String get idBack;
+
+  /// No description provided for @emergencyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Type'**
+  String get emergencyType;
+
+  /// No description provided for @chiefComplaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief Complaint / Description'**
+  String get chiefComplaint;
+
+  /// No description provided for @symptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get symptoms;
+
+  /// No description provided for @consciousLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Conscious Level'**
+  String get consciousLevel;
+
+  /// No description provided for @painLevel010.
+  ///
+  /// In en, this message translates to:
+  /// **'Pain Level (0 - 10)'**
+  String get painLevel010;
+
+  /// No description provided for @aAirway.
+  ///
+  /// In en, this message translates to:
+  /// **'A - Airway'**
+  String get aAirway;
+
+  /// No description provided for @airwayManaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Airway Managed?'**
+  String get airwayManaged;
+
+  /// No description provided for @method.
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get method;
+
+  /// No description provided for @bBreathing.
+  ///
+  /// In en, this message translates to:
+  /// **'B - Breathing'**
+  String get bBreathing;
+
+  /// No description provided for @respRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Resp. Rate (/min)'**
+  String get respRate;
+
+  /// No description provided for @spo2.
+  ///
+  /// In en, this message translates to:
+  /// **'SpO2 (%)'**
+  String get spo2;
+
+  /// No description provided for @breathingAssisted.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing Assisted?'**
+  String get breathingAssisted;
+
+  /// No description provided for @cCirculation.
+  ///
+  /// In en, this message translates to:
+  /// **'C - Circulation'**
+  String get cCirculation;
+
+  /// No description provided for @pulseMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse (/min)'**
+  String get pulseMin;
+
+  /// No description provided for @bpMmHg.
+  ///
+  /// In en, this message translates to:
+  /// **'BP (mmHg)'**
+  String get bpMmHg;
+
+  /// No description provided for @capillaryRefill.
+  ///
+  /// In en, this message translates to:
+  /// **'Capillary Refill'**
+  String get capillaryRefill;
+
+  /// No description provided for @bleedingControlled.
+  ///
+  /// In en, this message translates to:
+  /// **'Bleeding Controlled?'**
+  String get bleedingControlled;
+
+  /// No description provided for @dDisability.
+  ///
+  /// In en, this message translates to:
+  /// **'D - Disability'**
+  String get dDisability;
+
+  /// No description provided for @gcsScore.
+  ///
+  /// In en, this message translates to:
+  /// **'GCS Score:'**
+  String get gcsScore;
+
+  /// No description provided for @e14.
+  ///
+  /// In en, this message translates to:
+  /// **'E (1-4)'**
+  String get e14;
+
+  /// No description provided for @v15.
+  ///
+  /// In en, this message translates to:
+  /// **'V (1-5)'**
+  String get v15;
+
+  /// No description provided for @m16.
+  ///
+  /// In en, this message translates to:
+  /// **'M (1-6)'**
+  String get m16;
+
+  /// No description provided for @eExposure.
+  ///
+  /// In en, this message translates to:
+  /// **'E - Exposure'**
+  String get eExposure;
+
+  /// No description provided for @temperatureC.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature (°C)'**
+  String get temperatureC;
+
+  /// No description provided for @noVitalsRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'No vital signs recorded yet.'**
+  String get noVitalsRecorded;
+
+  /// No description provided for @timePulseBpSpo2.
+  ///
+  /// In en, this message translates to:
+  /// **'Time: {time} | Pulse: {pulse} | BP: {bp} | SpO2: {spo2}'**
+  String timePulseBpSpo2(String time, String pulse, String bp, String spo2);
+
+  /// No description provided for @logCurrentVitals.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Current Vitals'**
+  String get logCurrentVitals;
+
+  /// No description provided for @sSignsSymptoms.
+  ///
+  /// In en, this message translates to:
+  /// **'S - Signs & Symptoms'**
+  String get sSignsSymptoms;
+
+  /// No description provided for @aAllergies.
+  ///
+  /// In en, this message translates to:
+  /// **'A - Allergies'**
+  String get aAllergies;
+
+  /// No description provided for @mMedications.
+  ///
+  /// In en, this message translates to:
+  /// **'M - Medications'**
+  String get mMedications;
+
+  /// No description provided for @pPastMedicalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'P - Past Medical History'**
+  String get pPastMedicalHistory;
+
+  /// No description provided for @lLastMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'L - Last Meal'**
+  String get lLastMeal;
+
+  /// No description provided for @eEventsLeading.
+  ///
+  /// In en, this message translates to:
+  /// **'E - Events Leading to Illness/Injury'**
+  String get eEventsLeading;
+
+  /// No description provided for @knownConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Known Conditions'**
+  String get knownConditions;
+
+  /// No description provided for @interactiveBodyMapPlaceHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive Body Injury Map Placeholder'**
+  String get interactiveBodyMapPlaceHolder;
+
+  /// No description provided for @interactiveBodyMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'(Tap to add markers for burns, fractures, swelling, etc.)'**
+  String get interactiveBodyMapHint;
+
+  /// No description provided for @airwayManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'AIRWAY MANAGEMENT'**
+  String get airwayManagement;
+
+  /// No description provided for @o2Flow.
+  ///
+  /// In en, this message translates to:
+  /// **'O2 Flow (L/min)'**
+  String get o2Flow;
+
+  /// No description provided for @cardiovascular.
+  ///
+  /// In en, this message translates to:
+  /// **'CARDIOVASCULAR'**
+  String get cardiovascular;
+
+  /// No description provided for @immobilization.
+  ///
+  /// In en, this message translates to:
+  /// **'IMMOBILIZATION'**
+  String get immobilization;
+
+  /// No description provided for @medicationGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'MEDICATION GIVEN'**
+  String get medicationGiven;
+
+  /// No description provided for @medication.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication'**
+  String get medication;
+
+  /// No description provided for @dose.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose'**
+  String get dose;
+
+  /// No description provided for @route.
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get route;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
+  /// No description provided for @transportType.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport Type'**
+  String get transportType;
+
+  /// No description provided for @departureTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Departure Time'**
+  String get departureTime;
+
+  /// No description provided for @arrivalTimeExt.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival Time (Ext.)'**
+  String get arrivalTimeExt;
+
+  /// No description provided for @distanceCoveredKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance Covered (km)'**
+  String get distanceCoveredKm;
+
+  /// No description provided for @doctorNurseName.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor / Nurse Name'**
+  String get doctorNurseName;
+
+  /// No description provided for @handoverTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Handover Time'**
+  String get handoverTime;
+
+  /// No description provided for @conditionOnArrival.
+  ///
+  /// In en, this message translates to:
+  /// **'Condition on Arrival'**
+  String get conditionOnArrival;
+
+  /// No description provided for @handoverNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Handover Notes'**
+  String get handoverNotes;
+
+  /// No description provided for @submitPcr.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBMIT PATIENT CARE REPORT'**
+  String get submitPcr;
+
+  /// No description provided for @reportSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Report submitted successfully!'**
+  String get reportSubmitted;
+
+  /// No description provided for @errorSavingReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving report: {error}'**
+  String errorSavingReport(String error);
+
+  /// No description provided for @cancelTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Trip'**
+  String get cancelTrip;
+
+  /// No description provided for @cancelTripConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel this emergency request?'**
+  String get cancelTripConfirm;
+
+  /// No description provided for @tripCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'The trip has been cancelled.'**
+  String get tripCancelled;
+
+  /// No description provided for @yesCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Cancel'**
+  String get yesCancel;
+
+  /// No description provided for @noKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'No, Keep'**
+  String get noKeep;
 }
 
 class _AppLocalizationsDelegate

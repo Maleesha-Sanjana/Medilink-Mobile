@@ -319,6 +319,12 @@ class AppLocalizationsSi extends AppLocalizations {
   String get medicalNotesHint => 'උදා: දියවැඩියාව, පෙනිසිලින් සඳහා අසාත්මිකතා…';
 
   @override
+  String get medicalHistory => 'වෛද්‍ය ඉතිහාසය';
+
+  @override
+  String get medicalHistoryHint => 'පෙර රෝග, ශල්‍යකර්ම, පවුලේ ඉතිහාසය…';
+
+  @override
   String get emergencyContact => 'හදිසි සම්බන්ධතාව';
 
   @override
@@ -338,4 +344,365 @@ class AppLocalizationsSi extends AppLocalizations {
 
   @override
   String get genderPreferNot => 'කීමට කැමති නැත';
+
+  @override
+  String get paymentDetails => 'ගෙවීම් විස්තර';
+
+  @override
+  String get cardNumber => 'කාඩ්පත් අංකය';
+
+  @override
+  String get expiryDate => 'කල් ඉකුත් වන දිනය (MM/YY)';
+
+  @override
+  String get cvv => 'CVV';
+
+  @override
+  String get hospitalsTab => 'රෝහල්';
+
+  @override
+  String get noHospitals => 'තවමත් රෝහල් එකතු කර නොමැත';
+
+  @override
+  String get addHospital => 'රෝහලක් එකතු කරන්න';
+
+  @override
+  String get registerHospital => 'රෝහල ලියාපදිංචි කරන්න';
+
+  @override
+  String get hospitalName => 'රෝහලේ නම';
+
+  @override
+  String get locationAcquired => 'ස්ථානය ලබා ගෙන ඇත';
+
+  @override
+  String get fetchLocation => 'වත්මන් ස්ථානය ලබා ගන්න';
+
+  @override
+  String get register => 'ලියාපදිංචි කරන්න';
+
+  @override
+  String get deleteHospital => 'රෝහල මකන්න';
+
+  @override
+  String deleteHospitalConfirm(String name) {
+    return 'මකා දමන්නද $name?';
+  }
+
+  @override
+  String get hospitalRegistered => 'රෝහල සාර්ථකව ලියාපදිංචි කරන ලදි!';
+
+  @override
+  String get fetchLocationFirst => 'කරුණාකර පළමුව ස්ථානය ලබා ගන්න';
+
+  @override
+  String get hospitalNameRequired => 'රෝහලේ නම අවශ්‍යයි';
+
+  @override
+  String get hospitalDeleted => 'රෝහල මකා දමන ලදි';
+
+  @override
+  String get selectDestination => 'ගමනාන්තය තෝරන්න';
+
+  @override
+  String distanceKm(String distance) {
+    return 'දුර: කි.මී. $distance';
+  }
+
+  @override
+  String estimatedFare(String fare) {
+    return 'ඇස්තමේන්තු ගාස්තුව: LKR $fare';
+  }
+
+  @override
+  String get startTrip => 'ගමන ආරම්භ කරන්න';
+
+  @override
+  String get arrivingNow => 'දැන් පැමිණෙමින් පවතී';
+
+  @override
+  String minAway(String mins) {
+    return 'මිනිත්තු $mins කින්';
+  }
+
+  @override
+  String mAwayTime(String meters, String timeStr) {
+    return 'මීටර් $meters ක් දුරින් • $timeStr';
+  }
+
+  @override
+  String kmAwayTime(String km, String timeStr) {
+    return 'කි.මී. $km ක් දුරින් • $timeStr';
+  }
+
+  @override
+  String get transportingToHospital => 'රෝහලට ප්‍රවාහනය කරමින් පවතී!';
+
+  @override
+  String get emtOnTheWay => 'EMT පැමිණෙමින් සිටී!';
+
+  @override
+  String get hospital => 'රෝහල';
+
+  @override
+  String get ambulanceWord => 'ගිලන්රථය';
+
+  @override
+  String enRouteTo(String hospitalName) {
+    return '$hospitalName වෙත යමින්';
+  }
+
+  @override
+  String get emtAcceptedEnRoute => 'EMT පිළිගන්නා ලදි & පැමිණෙමින්';
+
+  @override
+  String hospitalTripFare(String price) {
+    return 'රෝහල් ගමන් ගාස්තුව: $price';
+  }
+
+  @override
+  String get liveLocationUpdating =>
+      'සජීවී ස්ථානය තත්පර 5කට වරක් යාවත්කාලීන වේ';
+
+  @override
+  String get waitingForEmtLocation => 'EMT ස්ථානය සඳහා රැඳී සිටින්න…';
+
+  @override
+  String get emtHasArrived => 'EMT පැමිණ ඇත!';
+
+  @override
+  String get emtAssessing =>
+      'EMT දැනට රෝගියා පරීක්ෂා කරමින් මූලික වාර්තාව පුරවමින් සිටී. කරුණාකර රැඳී සිටින්න.';
+
+  @override
+  String get estimatedInitialFare =>
+      'ඇස්තමේන්තුගත මූලික ගාස්තුව (කැඳවීම + EMT ගමන)';
+
+  @override
+  String get calculating => 'ගණනය කරමින්...';
+
+  @override
+  String get statusPending => 'තත්ත්වය: පොරොත්තු';
+
+  @override
+  String get pending => 'පොරොත්තු';
+
+  @override
+  String get pcrTitle => 'රෝගී සත්කාර වාර්තාව';
+
+  @override
+  String get nicPassport => 'ජා.හැ.ප. / විදේශ ගමන් බලපත්‍රය';
+
+  @override
+  String get age => 'වයස';
+
+  @override
+  String get bloodGroup => 'රුධිර ගණය';
+
+  @override
+  String get contactNo => 'සම්බන්ධ කරගත යුතු අංකය';
+
+  @override
+  String get guardianNextOfKin => 'භාරකරු / ඥාතියා';
+
+  @override
+  String get relationship => 'ඥාතිත්වය';
+
+  @override
+  String get guardianContactNo => 'භාරකරුගේ දුරකථන අංකය';
+
+  @override
+  String get idFront => 'හැඳුනුම්පත ඉදිරිපස';
+
+  @override
+  String get idBack => 'හැඳුනුම්පත පසුපස';
+
+  @override
+  String get emergencyType => 'හදිසි තත්වයේ වර්ගය';
+
+  @override
+  String get chiefComplaint => 'ප්‍රධාන පැමිණිල්ල / විස්තරය';
+
+  @override
+  String get symptoms => 'රෝග ලක්ෂණ';
+
+  @override
+  String get consciousLevel => 'සිහිය ඇති මට්ටම';
+
+  @override
+  String get painLevel010 => 'වේදනා මට්ටම (0 - 10)';
+
+  @override
+  String get aAirway => 'A - ශ්වසන මාර්ගය';
+
+  @override
+  String get airwayManaged => 'ශ්වසන මාර්ගය කළමනාකරණය කළාද?';
+
+  @override
+  String get method => 'ක්‍රමය';
+
+  @override
+  String get bBreathing => 'B - හුස්ම ගැනීම';
+
+  @override
+  String get respRate => 'ශ්වසන වේගය (/min)';
+
+  @override
+  String get spo2 => 'SpO2 (%)';
+
+  @override
+  String get breathingAssisted => 'හුස්ම ගැනීමට සහාය වූවාද?';
+
+  @override
+  String get cCirculation => 'C - රුධිර සංසරණය';
+
+  @override
+  String get pulseMin => 'නාඩි (/min)';
+
+  @override
+  String get bpMmHg => 'රුධිර පීඩනය (mmHg)';
+
+  @override
+  String get capillaryRefill => 'Capillary Refill';
+
+  @override
+  String get bleedingControlled => 'රුධිර වහනය පාලනය කළාද?';
+
+  @override
+  String get dDisability => 'D - ආබාධිත බව';
+
+  @override
+  String get gcsScore => 'GCS අගය:';
+
+  @override
+  String get e14 => 'E (1-4)';
+
+  @override
+  String get v15 => 'V (1-5)';
+
+  @override
+  String get m16 => 'M (1-6)';
+
+  @override
+  String get eExposure => 'E - නිරාවරණය';
+
+  @override
+  String get temperatureC => 'උෂ්ණත්වය (°C)';
+
+  @override
+  String get noVitalsRecorded => 'තාමත් ජීව සලකුණු වාර්තා කර නොමැත.';
+
+  @override
+  String timePulseBpSpo2(String time, String pulse, String bp, String spo2) {
+    return 'වේලාව: $time | නාඩි: $pulse | රු.පී: $bp | SpO2: $spo2';
+  }
+
+  @override
+  String get logCurrentVitals => 'වත්මන් ජීව සලකුණු සටහන් කරන්න';
+
+  @override
+  String get sSignsSymptoms => 'S - සංඥා සහ ලක්ෂණ';
+
+  @override
+  String get aAllergies => 'A - අසාත්මිකතා';
+
+  @override
+  String get mMedications => 'M - ඖෂධ';
+
+  @override
+  String get pPastMedicalHistory => 'P - පෙර වෛද්‍ය ඉතිහාසය';
+
+  @override
+  String get lLastMeal => 'L - අවසන් ආහාරය';
+
+  @override
+  String get eEventsLeading => 'E - අසනීපයට/තුවාලයට හේතු වූ සිදුවීම්';
+
+  @override
+  String get knownConditions => 'දන්නා රෝගී තත්වයන්';
+
+  @override
+  String get interactiveBodyMapPlaceHolder =>
+      'අන්තර්ක්‍රියාකාරී ශරීර තුවාල සිතියම';
+
+  @override
+  String get interactiveBodyMapHint =>
+      '(පිලිස්සුම්, අස්ථි බිඳීම්, ඉදිමීම් ආදිය සඳහා සලකුණු එකතු කිරීමට තට්ටු කරන්න)';
+
+  @override
+  String get airwayManagement => 'ශ්වසන මාර්ග කළමනාකරණය';
+
+  @override
+  String get o2Flow => 'O2 ගලනය (L/min)';
+
+  @override
+  String get cardiovascular => 'හෘද වාහිනී';
+
+  @override
+  String get immobilization => 'නිශ්චල කිරීම';
+
+  @override
+  String get medicationGiven => 'ලබා දුන් ඖෂධ';
+
+  @override
+  String get medication => 'ඖෂධය';
+
+  @override
+  String get dose => 'මාත්‍රාව';
+
+  @override
+  String get route => 'මාර්ගය';
+
+  @override
+  String get time => 'වේලාව';
+
+  @override
+  String get transportType => 'ප්‍රවාහන වර්ගය';
+
+  @override
+  String get departureTime => 'පිටත් වූ වේලාව';
+
+  @override
+  String get arrivalTimeExt => 'පැමිණි වේලාව';
+
+  @override
+  String get distanceCoveredKm => 'ගමන් කළ දුර (km)';
+
+  @override
+  String get doctorNurseName => 'වෛද්‍ය / හෙද නම';
+
+  @override
+  String get handoverTime => 'භාර දුන් වේලාව';
+
+  @override
+  String get conditionOnArrival => 'පැමිණෙන විට තත්වය';
+
+  @override
+  String get handoverNotes => 'භාරදීමේ සටහන්';
+
+  @override
+  String get submitPcr => 'රෝගී සත්කාර වාර්තාව ඉදිරිපත් කරන්න';
+
+  @override
+  String get reportSubmitted => 'වාර්තාව සාර්ථකව ඉදිරිපත් කරන ලදි!';
+
+  @override
+  String errorSavingReport(String error) {
+    return 'වාර්තාව සුරැකීමේ දෝෂයක්: $error';
+  }
+
+  @override
+  String get cancelTrip => 'ගමන අවලංගු කරන්න';
+
+  @override
+  String get cancelTripConfirm => 'ඔබට මෙම හදිසි ඉල්ලීම අවලංගු කිරීමට අවශ්‍යද?';
+
+  @override
+  String get tripCancelled => 'ගමන අවලංගු කරන ලදී.';
+
+  @override
+  String get yesCancel => 'ඔව්, අවලංගු කරන්න';
+
+  @override
+  String get noKeep => 'නැත';
 }
