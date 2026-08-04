@@ -62,49 +62,6 @@ class AuthService {
     return true;
   }
 
-  // ── Apple Sign In (requires paid Apple Developer account) ────────────────
-  Future<void> signInWithApple() async {
-    throw UnsupportedError(
-      'Sign in with Apple requires a paid Apple Developer account.',
-    );
-  }
-
-  // ── Phone OTP ─────────────────────────────────────────────────────────────
-  Future<void> sendPhoneOtp({
-    required String phoneNumber,
-    required void Function(PhoneAuthCredential) onAutoVerified,
-    required void Function(FirebaseAuthException) onFailed,
-    required void Function(String verificationId, int? resendToken) onCodeSent,
-  }) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      forceResendingToken: null,
-      timeout: const Duration(seconds: 60),
-      verificationCompleted: onAutoVerified,
-      verificationFailed: onFailed,
-      codeSent: (id, token) => onCodeSent(id, token),
-      codeAutoRetrievalTimeout: (_) {},
-    );
-  }
-
-  Future<void> verifyPhoneOtp({
-    required String verificationId,
-    required String smsCode,
-  }) async {
-    final credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-    final cred = await _auth.signInWithCredential(credential);
-    if (cred.additionalUserInfo?.isNewUser == true) {
-      await _userService.createUser(
-        uid: cred.user!.uid,
-        email: cred.user!.email ?? '',
-        role: 'patient',
-      );
-    }
-  }
-
   // ── Admin: update password of another account ────────────────────────────
   Future<void> updatePasswordByAdmin({
     required String email,

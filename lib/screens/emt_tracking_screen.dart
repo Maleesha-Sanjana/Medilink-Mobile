@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -284,6 +285,13 @@ class _EmtTrackingScreenState extends State<EmtTrackingScreen>
 
           final isPatient = data['uid'] == FirebaseAuth.instance.currentUser?.uid;
           final isArrived = status == 'arrived';
+
+          if (isPatient && status == 'payment_pending') {
+            return Scaffold(
+              backgroundColor: isDark ? const Color(0xFF0D0D0D) : const Color(0xFFF5F6FA),
+              body: _PaymentPendingPatientView(data: data, requestId: widget.requestId),
+            );
+          }
 
           if (isPatient && status == 'completed') {
             if (status == 'completed') {
@@ -821,7 +829,7 @@ class _PulsingDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      builder: (_, __) => Stack(
+      builder: (context, _) => Stack(
         alignment: Alignment.center,
         children: [
           Container(
@@ -1135,3 +1143,270 @@ class _PdfViewerScreen extends StatelessWidget {
   }
 }
 
+class _PaymentPendingPatientView extends StatefulWidget {
+  final Map<String, dynamic> data;
+  final String requestId;
+
+  const _PaymentPendingPatientView({required this.data, required this.requestId});
+
+  @override
+  State<_PaymentPendingPatientView> createState() => _PaymentPendingPatientViewState();
+}
+
+class _PaymentPendingPatientViewState extends State<_PaymentPendingPatientView> {
+  bool _loading = false;
+
+  Future<void> _showPaymentDialog() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    setState(() => _loading = true);
+    
+    String savedCard = '';
+    String savedExpiry = '';
+    String savedCvv = '';
+    
+    try {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      if (doc.exists) {
+        final d = doc.data() ?? {};
+        savedCard = d['cardNumber'] ?? '';
+        savedExpiry = d['expiryDate'] ?? '';
+        savedCvv = d['cvv'] ?? '';
+      }
+    } catch (_) {}
+
+    setState(() => _loading = false);
+
+    if (!mounted) return;
+
+    final cardCtrl = TextEditingController(text: savedCard);
+    final expiryCtrl = TextEditingController(text: savedExpiry);
+    final cvvCtrl = TextEditingController(text: savedCvv);
+    bool processing = false;
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 24,
+                right: 24,
+                top: 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Card Payment', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: cardCtrl,
+                    decoration: const InputDecoration(labelText: 'Card Number', border: OutlineInputBorder()),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: expiryCtrl,
+                          decoration: const InputDecoration(labelText: 'Expiry (MM/YY)', border: OutlineInputBorder()),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          controller: cvvCtrl,
+                          decoration: const InputDecoration(labelText: 'CVV', border: OutlineInputBorder()),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: processing ? null : () async {
+                        if (cardCtrl.text.isEmpty || expiryCtrl.text.isEmpty || cvvCtrl.text.isEmpty) return;
+                        setModalState(() => processing = true);
+                        try {
+                          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+                            'cardNumber': cardCtrl.text.trim(),
+                            'expiryDate': expiryCtrl.text.trim(),
+                            'cvv': cvvCtrl.text.trim(),
+                          });
+
+                          double initialFare = 0.0;
+                          double hospitalFare = 0.0;
+                          String initialStr = widget.data['price']?.toString() ?? 'LKR 0';
+                          String hospStr = widget.data['hospitalTripPrice']?.toString() ?? 'LKR 0';
+                          
+                          double parse(String s) => double.tryParse(s.replaceAll('LKR', '').replaceAll(',', '').trim()) ?? 0.0;
+                          
+                          initialFare = parse(initialStr);
+                          hospitalFare = parse(hospStr);
+                          double total = initialFare + hospitalFare;
+                          final fmt = NumberFormat('#,##0');
+                          String totalStr = 'LKR ${fmt.format(total)}';
+
+                          await FirebaseFirestore.instance.collection('emergency_requests').doc(widget.requestId).update({
+                            'status': 'completed',
+                            'paymentCollected': true,
+                            'paymentMethod': 'card',
+                            'totalFare': totalStr,
+                          });
+                          
+                          if (ctx.mounted) Navigator.pop(ctx);
+                        } catch (e) {
+                          setModalState(() => processing = false);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2D3A8C), foregroundColor: Colors.white),
+                      child: processing 
+                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        : const Text('Confirm Payment', style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            );
+          },
+        );
+      }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    double initialFare = 0.0;
+    double hospitalFare = 0.0;
+    String initialStr = widget.data['price']?.toString() ?? 'LKR 0';
+    String hospStr = widget.data['hospitalTripPrice']?.toString() ?? 'LKR 0';
+    
+    double parse(String s) => double.tryParse(s.replaceAll('LKR', '').replaceAll(',', '').trim()) ?? 0.0;
+    
+    initialFare = parse(initialStr);
+    hospitalFare = parse(hospStr);
+    double total = initialFare + hospitalFare;
+    final fmt = NumberFormat('#,##0');
+    String totalStr = 'LKR ${fmt.format(total)}';
+
+    return SafeArea(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue.withValues(alpha: 0.1),
+                ),
+                child: const Icon(
+                  Icons.payments_rounded,
+                  color: Colors.blue,
+                  size: 64,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Handover Completed',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Please complete the payment for the ambulance trip.',
+                style: TextStyle(
+                  fontSize: 16,
+                  height: 1.5,
+                  color: isDark ? Colors.white70 : Colors.grey.shade700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.info_outline_rounded, color: Colors.blue),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Total Due',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? Colors.white70 : Colors.grey.shade700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      totalStr,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.green.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: _loading ? null : _showPaymentDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: _loading 
+                      ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Text('Pay Now', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

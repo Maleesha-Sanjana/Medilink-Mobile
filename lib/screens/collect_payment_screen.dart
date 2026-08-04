@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
@@ -10,10 +11,10 @@ class CollectPaymentScreen extends StatefulWidget {
   final Map<String, dynamic> initialData;
 
   const CollectPaymentScreen({
-    Key? key,
+    super.key,
     required this.requestId,
     required this.initialData,
-  }) : super(key: key);
+  });
 
   @override
   State<CollectPaymentScreen> createState() => _CollectPaymentScreenState();
@@ -28,10 +29,52 @@ class _CollectPaymentScreenState extends State<CollectPaymentScreen> {
   String _hospitalFareStr = 'LKR 0';
   String _totalFareStr = 'LKR 0';
 
+  StreamSubscription? _sub;
+
   @override
   void initState() {
     super.initState();
     _calculateFares();
+    _listenForRemotePayment();
+  }
+
+  void _listenForRemotePayment() {
+    _sub = FirebaseFirestore.instance.collection('emergency_requests').doc(widget.requestId).snapshots().listen((doc) {
+      if (!doc.exists) return;
+      final data = doc.data()!;
+      if (data['status'] == 'completed' && data['paymentMethod'] == 'card' && !_loading) {
+        _sub?.cancel();
+        
+        // Fetch patient name if available, else use a generic name
+        String patientName = data['patientName']?.toString() ?? 'Patient';
+
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Payment Successful'),
+              content: Text('Paid by "$patientName"'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx); // Close dialog
+                    _proceedToPdf(data);
+                  },
+                  child: const Text('OK'),
+                )
+              ],
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
   }
 
   double _parsePrice(String? priceStr) {
@@ -53,43 +96,47 @@ class _CollectPaymentScreenState extends State<CollectPaymentScreen> {
     _totalFareStr = 'LKR ${fmt.format(_totalFare)}';
   }
 
-  Future<void> _confirmPayment() async {
+  Future<void> _confirmPayment(String method) async {
     setState(() => _loading = true);
     try {
       // Mark as completed and payment collected
       await FirebaseFirestore.instance.collection('emergency_requests').doc(widget.requestId).update({
         'status': 'completed',
         'paymentCollected': true,
+        'paymentMethod': method,
         'totalFare': _totalFareStr,
       });
 
       final updatedData = Map<String, dynamic>.from(widget.initialData)
         ..['status'] = 'completed'
         ..['paymentCollected'] = true
+        ..['paymentMethod'] = method
         ..['totalFare'] = _totalFareStr;
 
-      final docName = updatedData['handoverDoctor']?.toString() ?? 'Unknown';
+      await _proceedToPdf(updatedData);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() => _loading = false);
+      }
+    } 
+  }
 
-      final pdfData = await PdfService.generateHandoverReport(updatedData, docName);
+  Future<void> _proceedToPdf(Map<String, dynamic> data) async {
+    try {
+      final docName = data['handoverDoctor']?.toString() ?? 'Unknown';
+      final pdfData = await PdfService.generateHandoverReport(data, docName);
       
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('active_request_id');
       await prefs.remove('active_request_type');
 
       if (mounted) {
-        // Pop the screen back to dashboard
         Navigator.pop(context);
-        // Show PDF
         await Printing.layoutPdf(onLayout: (format) async => pdfData);
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _loading = false);
-      }
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -122,7 +169,7 @@ class _CollectPaymentScreenState extends State<CollectPaymentScreen> {
               Text(
                 'Please collect the total cash payment from the patient or guardian before concluding the trip.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.7)),
+                style: TextStyle(fontSize: 16, color: textColor.withValues(alpha: 0.7)),
               ),
               const SizedBox(height: 40),
               
@@ -171,7 +218,7 @@ class _CollectPaymentScreenState extends State<CollectPaymentScreen> {
               const Spacer(),
               
               ElevatedButton(
-                onPressed: _loading ? null : _confirmPayment,
+                onPressed: _loading ? null : () => _confirmPayment('cash'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
@@ -182,6 +229,20 @@ class _CollectPaymentScreenState extends State<CollectPaymentScreen> {
                 child: _loading
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                     : const Text('Confirm Cash Collected', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: _loading ? null : () => _confirmPayment('card'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2D3A8C),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 2,
+                ),
+                child: _loading
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    : const Text('Confirm Card Payment', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ],
           ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'signup_screen.dart';
-import 'phone_auth_screen.dart';
 import '../main.dart';
 import '../theme/theme_toggle_button.dart';
 import '../theme/language_toggle_button.dart';
@@ -86,24 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _appleSignIn() async {
-    setState(() => _loading = true);
-    try {
-      await _auth.signInWithApple();
-      _navigate();
-    } on Exception catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authErrorMessage(e)),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -121,7 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final borderColor = isDark
         ? const Color(0xFF333333)
         : const Color(0xFFE0E0E0);
-    final appleColor = isDark ? Colors.white : Colors.black;
 
     return Scaffold(
       body: SafeArea(
@@ -288,49 +268,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: _loading ? () {} : _googleSignIn,
-                            isDark: isDark,
-                            child: SvgPicture.string(
-                              _googleGSvg,
-                              height: 24,
-                              width: 24,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: _loading ? () {} : _appleSignIn,
-                            isDark: isDark,
-                            child: FaIcon(
-                              FontAwesomeIcons.apple,
-                              color: appleColor,
-                              size: 26,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const PhoneAuthScreen(),
-                              ),
-                            ),
-                            isDark: isDark,
-                            child: const Icon(
-                              Icons.phone_android_rounded,
-                              color: Color(0xFF2D3A8C),
-                              size: 26,
-                            ),
-                          ),
-                        ),
-                      ],
+                    _SocialIconButton(
+                      onTap: _loading ? () {} : _googleSignIn,
+                      isDark: isDark,
+                      child: SvgPicture.string(
+                        _googleGSvg,
+                        height: 24,
+                        width: 24,
+                      ),
                     ),
                     const SizedBox(height: 56),
                     Center(

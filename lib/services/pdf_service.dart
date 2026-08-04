@@ -134,12 +134,16 @@ class PdfService {
     return pdf.save();
   }
 
+  static String _sanitize(String text) {
+    return text.replaceAll('’', "'").replaceAll('“', '"').replaceAll('”', '"').replaceAll('—', '-');
+  }
+
   static pw.Widget _buildSectionHeader(String title) {
     return pw.Container(
       width: double.infinity,
       padding: const pw.EdgeInsets.all(4),
       decoration: const pw.BoxDecoration(color: PdfColors.blue900),
-      child: pw.Text(title, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 12)),
+      child: pw.Text(_sanitize(title), style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 12)),
     );
   }
 
@@ -148,10 +152,10 @@ class PdfService {
       padding: const pw.EdgeInsets.symmetric(vertical: 3),
       child: pw.Row(
         children: [
-          pw.Expanded(flex: 2, child: pw.Text(label1, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10))),
-          pw.Expanded(flex: 3, child: pw.Text(val1, style: const pw.TextStyle(fontSize: 10))),
-          pw.Expanded(flex: 2, child: pw.Text(label2, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10))),
-          pw.Expanded(flex: 3, child: pw.Text(val2, style: const pw.TextStyle(fontSize: 10))),
+          pw.Expanded(flex: 2, child: pw.Text(_sanitize(label1), style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10))),
+          pw.Expanded(flex: 3, child: pw.Text(_sanitize(val1), style: const pw.TextStyle(fontSize: 10))),
+          pw.Expanded(flex: 2, child: pw.Text(_sanitize(label2), style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10))),
+          pw.Expanded(flex: 3, child: pw.Text(_sanitize(val2), style: const pw.TextStyle(fontSize: 10))),
         ],
       ),
     );

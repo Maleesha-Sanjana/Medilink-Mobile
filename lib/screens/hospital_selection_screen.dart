@@ -45,10 +45,12 @@ class _HospitalSelectionScreenState extends State<HospitalSelectionScreen> {
 
   Future<void> _fetchData() async {
     try {
-      final hList = await HospitalService().getHospitals();
-      
-      // Fetch PCR data
+      final allHospitals = await HospitalService().getHospitals();
+      final hList = allHospitals.where((h) => h.status == 'approved').toList();
+
+      // Fetch PCR data and required facilities
       Map<String, dynamic> pcrData = {};
+      List<String> desiredFeatures = [];
       try {
         final reqDoc = await FirebaseFirestore.instance.collection('emergency_requests').doc(widget.requestId).get();
         if (reqDoc.exists) {
@@ -57,6 +59,10 @@ class _HospitalSelectionScreenState extends State<HospitalSelectionScreen> {
             _isPatient = data['uid'] == FirebaseAuth.instance.currentUser?.uid;
             if (data['patientCareReport'] != null) {
               pcrData = data['patientCareReport'] as Map<String, dynamic>;
+            }
+            if (data['requiredFacilities'] != null) {
+              final reqFacs = data['requiredFacilities'] as List<dynamic>;
+              desiredFeatures.addAll(reqFacs.map((e) => e.toString()));
             }
           }
         }
@@ -69,7 +75,6 @@ class _HospitalSelectionScreenState extends State<HospitalSelectionScreen> {
       final String complaint = (pcrData['chiefComplaint'] ?? '').toString().toLowerCase();
       final String symptoms = (pcrData['symptoms'] ?? '').toString().toLowerCase();
       
-      List<String> desiredFeatures = [];
       if (type.contains('trauma') || complaint.contains('accident') || symptoms.contains('fracture') || symptoms.contains('broken')) {
         desiredFeatures.addAll(['Trauma Center', 'X-Ray']);
       }

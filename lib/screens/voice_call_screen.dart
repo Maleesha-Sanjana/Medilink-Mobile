@@ -57,8 +57,9 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
       final data = doc.data() ?? {};
       final patientUid = data['uid'] as String? ?? '';
       final emtUid = data['emtUid'] as String? ?? '';
+      final isAdminCall = data['isAdminCall'] == true;
       final myUid = FirebaseAuth.instance.currentUser?.uid ?? '';
-      if (myUid != patientUid && myUid != emtUid) {
+      if (myUid != patientUid && myUid != emtUid && !isAdminCall) {
         if (mounted) Navigator.of(context).pop();
         return;
       }
@@ -81,8 +82,10 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     );
 
     // Enable speaker by default for emergency calls
-    await _engine!.setEnableSpeakerphone(true);
-    setState(() => _speakerOn = true);
+    try {
+      await _engine!.setEnableSpeakerphone(true);
+      setState(() => _speakerOn = true);
+    } catch (_) {}
 
     // Register event handlers
     _engine!.registerEventHandler(
@@ -153,13 +156,23 @@ class _VoiceCallScreenState extends State<VoiceCallScreen> {
     _leaveAndPop();
   }
 
+  bool _isLeaving = false;
+
   Future<void> _leaveAndPop() async {
+    if (_isLeaving) return;
+    _isLeaving = true;
     _timer?.cancel();
     _callStateSub?.cancel();
-    await _engine?.leaveChannel();
-    await _engine?.release();
+    
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+
+    try {
+      await _engine?.leaveChannel();
+      await _engine?.release();
+    } catch (_) {}
     _engine = null;
-    if (mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -418,8 +431,8 @@ class IncomingCallScreen extends StatelessWidget {
                     label: 'Decline',
                     color: Colors.red,
                     size: 68,
-                    onTap: () async {
-                      await AgoraService().endCall(requestId);
+                    onTap: () {
+                      AgoraService().endCall(requestId); // Fire and forget
                       if (context.mounted) Navigator.of(context).pop();
                     },
                   ),
@@ -430,8 +443,8 @@ class IncomingCallScreen extends StatelessWidget {
                     label: 'Accept',
                     color: Colors.green,
                     size: 68,
-                    onTap: () async {
-                      await AgoraService().acceptCall(requestId);
+                    onTap: () {
+                      AgoraService().acceptCall(requestId); // Fire and forget for instant UI response
                       if (context.mounted) {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
@@ -479,6 +492,7 @@ class _CallControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,10 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
-import 'waiting_screen.dart';
+import 'emt_tracking_screen.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -17,62 +17,41 @@ class EmergencyScreen extends StatefulWidget {
   State<EmergencyScreen> createState() => _EmergencyScreenState();
 }
 
-class _EmergencyScreenState extends State<EmergencyScreen> {
+class _EmergencyScreenState extends State<EmergencyScreen>
+    with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   LatLng _currentLocation = const LatLng(6.9271, 79.8612);
   bool _locationLoaded = false;
-  int _selectedVehicle = 0;
-  double? _estimatedDistanceKm;
+  
+  String? _requestId;
+  String _requestStatus = 'locating'; // 'locating', 'pending', 'assigned', 'accepted'
+  Map<String, dynamic> _requestData = {};
+  StreamSubscription<DocumentSnapshot>? _requestSub;
+  bool _hasShownAccepted = false;
+  bool _isReassigning = false;
+
+  late AnimationController _rotateCtrl;
+  
+  // Hardcoded ambulance type for automatic dispatch
+  final String _ambulanceType = 'Emergency Ambulance';
+  final String _price = 'LKR 5,000';
 
   @override
   void initState() {
     super.initState();
+    _rotateCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
+    
     _getLocation();
   }
 
-  List<_AmbulanceType> _buildVehicles(AppLocalizations l) {
-    final dist = _estimatedDistanceKm ?? 8.0;
-    final basicFare = 5000.0 + (dist * 200.0);
-    final advancedFare = basicFare * 1.5;
-    final icuFare = basicFare * 2.0;
-    final neonatalFare = basicFare * 1.8;
-    
-    final fmt = NumberFormat('#,##0');
-
-    return [
-      _AmbulanceType(
-        name: l.basicAmbulance,
-        icon: Icons.emergency_rounded,
-        capacity: l.capacity2,
-        price: 'LKR ${fmt.format(basicFare)}',
-        stars: '98.4',
-        color: const Color(0xFF2D3A8C),
-      ),
-      _AmbulanceType(
-        name: l.advancedAmbulance,
-        icon: Icons.local_hospital_rounded,
-        capacity: l.capacity1,
-        price: 'LKR ${fmt.format(advancedFare)}',
-        stars: '112.1',
-        color: Colors.red,
-      ),
-      _AmbulanceType(
-        name: l.icuAmbulance,
-        icon: Icons.monitor_heart_rounded,
-        capacity: l.capacity1,
-        price: 'LKR ${fmt.format(icuFare)}',
-        stars: '87.3',
-        color: Colors.orange,
-      ),
-      _AmbulanceType(
-        name: l.neonatalAmbulance,
-        icon: Icons.child_care_rounded,
-        capacity: l.capacityInfant,
-        price: 'LKR ${fmt.format(neonatalFare)}',
-        stars: '74.6',
-        color: Colors.teal,
-      ),
-    ];
+  @override
+  void dispose() {
+    _requestSub?.cancel();
+    _rotateCtrl.dispose();
+    super.dispose();
   }
 
   Future<void> _getLocation() async {
@@ -93,401 +72,16 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         _locationLoaded = true;
       });
       _mapController.move(_currentLocation, 15.0);
-      _calculateDistanceToEmt();
+      
+      // Once location is loaded, automatically submit the request
+      _autoSubmitRequest();
     } catch (e) {
       debugPrint('Location error: $e');
     }
   }
 
-  Future<void> _calculateDistanceToEmt() async {
-    try {
-      final usersSnap = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'emt')
-          .get();
-      
-      final tenMinsAgo = DateTime.now().subtract(const Duration(minutes: 10));
-      
-      List<Map<String, dynamic>> availableEmts = [];
-      for (var doc in usersSnap.docs) {
-        final data = doc.data();
-        final lastLat = data['lastLatitude'];
-        final lastLng = data['lastLongitude'];
-        final lastOnline = data['lastOnlineAt'] as Timestamp?;
-        
-        if (lastLat == null || lastLng == null || lastOnline == null) continue;
-        if (lastOnline.toDate().isBefore(tenMinsAgo)) continue;
-        
-        final activeTripSnap = await FirebaseFirestore.instance
-            .collection('emergency_requests')
-            .where('emtUid', isEqualTo: doc.id)
-            .where('status', isEqualTo: 'accepted')
-            .limit(1)
-            .get();
-        if (activeTripSnap.docs.isNotEmpty) continue;
-        
-        availableEmts.add({
-          'lat': lastLat,
-          'lng': lastLng,
-        });
-      }
-      
-      if (availableEmts.isEmpty) {
-        if (mounted) setState(() => _estimatedDistanceKm = 8.0);
-        return;
-      }
-      
-      final distance = const Distance();
-      double minD = double.infinity;
-      for (var emt in availableEmts) {
-        final d = distance.as(
-          LengthUnit.Meter,
-          _currentLocation,
-          LatLng(emt['lat'], emt['lng']),
-        );
-        if (d < minD) minD = d;
-      }
-      
-      if (mounted) setState(() => _estimatedDistanceKm = minD / 1000.0);
-    } catch (_) {
-      if (mounted) setState(() => _estimatedDistanceKm = 8.0);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final vehicles = _buildVehicles(l);
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          // ── Full screen map ───────────────────────────────────
-          FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              initialCenter: _currentLocation,
-              initialZoom: 15,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.stj.stj_medilink_plus',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: _currentLocation,
-                    width: 48,
-                    height: 48,
-                    child: const _PulsingMarker(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          // ── Back button ───────────────────────────────────────
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 12,
-            left: 16,
-            child: _MapButton(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(Icons.arrow_back, size: 20),
-            ),
-          ),
-
-          // ── Your location chip ────────────────────────────────
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 12,
-            right: 16,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2D3A8C),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.location_on_rounded,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    _locationLoaded ? l.yourLocation : l.locating,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Recenter button ───────────────────────────────────
-          Positioned(
-            bottom: 300,
-            right: 16,
-            child: _MapButton(
-              onTap: () => _mapController.move(_currentLocation, 15),
-              child: const Icon(
-                Icons.my_location_rounded,
-                size: 20,
-                color: Color(0xFF2D3A8C),
-              ),
-            ),
-          ),
-
-          // ── Bottom sheet ──────────────────────────────────────
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.15),
-                    blurRadius: 20,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  // ── Vehicle selector ──────────────────────────
-                  SizedBox(
-                    height: 130,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: vehicles.length,
-                      itemBuilder: (context, i) {
-                        final v = vehicles[i];
-                        final selected = _selectedVehicle == i;
-                        return GestureDetector(
-                          onTap: () => setState(() => _selectedVehicle = i),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: 110,
-                            margin: const EdgeInsets.only(right: 12),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: selected
-                                  ? const Color(0xFF2D3A8C)
-                                  : isDark
-                                  ? const Color(0xFF2A2A2A)
-                                  : Colors.white,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                color: selected
-                                    ? const Color(0xFF2D3A8C)
-                                    : Colors.grey.shade300,
-                                width: selected ? 2 : 1,
-                              ),
-                              boxShadow: selected
-                                  ? [
-                                      BoxShadow(
-                                        color: const Color(
-                                          0xFF2D3A8C,
-                                        ).withValues(alpha: 0.3),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]
-                                  : [],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  v.icon,
-                                  size: 28,
-                                  color: selected ? Colors.white : v.color,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  v.name,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13,
-                                    color: selected
-                                        ? Colors.white
-                                        : isDark
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  v.capacity,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: selected
-                                        ? Colors.white70
-                                        : Colors.grey,
-                                  ),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  v.price,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11,
-                                    color: selected
-                                        ? Colors.white
-                                        : const Color(0xFF2D3A8C),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.star_rounded,
-                                      size: 11,
-                                      color: Colors.amber,
-                                    ),
-                                    const SizedBox(width: 2),
-                                    Text(
-                                      v.stars,
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: selected
-                                            ? Colors.white70
-                                            : Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // ── Book Now button ───────────────────────────
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: ElevatedButton(
-                        onPressed: () => _confirmBooking(context, l, vehicles),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2D3A8C),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          l.requestAmbulance(vehicles[_selectedVehicle].name),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirmBooking(
-    BuildContext context,
-    AppLocalizations l,
-    List<_AmbulanceType> vehicles,
-  ) {
-    final v = vehicles[_selectedVehicle];
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(
-          children: [
-            const Icon(Icons.emergency_rounded, color: Colors.red, size: 24),
-            const SizedBox(width: 8),
-            Text(
-              l.confirmRequest,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l.ambulanceType(v.name)),
-            Text(l.price(v.price)),
-            const SizedBox(height: 8),
-            Text(
-              l.dispatchMessage,
-              style: const TextStyle(color: Colors.grey, fontSize: 13),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _submitRequest(context, l, v);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2D3A8C),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(l.confirm),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _submitRequest(
-    BuildContext context,
-    AppLocalizations l,
-    _AmbulanceType v,
-  ) async {
+  Future<void> _autoSubmitRequest() async {
+    setState(() => _requestStatus = 'creating');
     try {
       final user = FirebaseAuth.instance.currentUser;
       final caseId = 'CASE-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}-${Random().nextInt(9999).toString().padLeft(4, '0')}';
@@ -500,8 +94,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             'caseId': caseId,
             'uid': user?.uid,
             'patientName': user?.displayName ?? user?.email ?? 'Patient',
-            'ambulanceType': v.name,
-            'price': v.price,
+            'ambulanceType': _ambulanceType,
+            'price': _price,
             'latitude': _currentLocation.latitude,
             'longitude': _currentLocation.longitude,
             'status': assignedEmtUid != null ? 'assigned' : 'pending',
@@ -512,19 +106,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('active_request_id', doc.id);
-      await prefs.setString('active_request_type', v.name);
+      await prefs.setString('active_request_type', _ambulanceType);
 
-      if (context.mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                WaitingScreen(requestId: doc.id, ambulanceType: v.name),
-          ),
-        );
-      }
+      if (!mounted) return;
+      
+      _requestId = doc.id;
+      _listenToRequest();
+      
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to send request: $e'),
@@ -533,6 +123,35 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         );
       }
     }
+  }
+
+  void _listenToRequest() {
+    if (_requestId == null) return;
+    
+    _requestSub = FirebaseFirestore.instance
+        .collection('emergency_requests')
+        .doc(_requestId)
+        .snapshots()
+        .listen((snapshot) {
+      if (!snapshot.exists) return;
+      final data = snapshot.data() as Map<String, dynamic>;
+      final status = data['status'] as String? ?? 'pending';
+
+      if (mounted) {
+        setState(() {
+          _requestData = data;
+          _requestStatus = status;
+        });
+      }
+
+      // Auto-navigate when accepted
+      if (status == 'accepted' && !_hasShownAccepted) {
+        _hasShownAccepted = true;
+        _showAcceptedAndPop();
+      } else if (status == 'rejected') {
+        _reassignEmt(data);
+      }
+    });
   }
 
   Future<String?> _getNearestAvailableEmt({List<dynamic> rejectedBy = const []}) async {
@@ -588,6 +207,399 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     });
 
     return availableEmts.first['uid'] as String;
+  }
+
+  Future<void> _reassignEmt(Map<String, dynamic> data) async {
+    if (_isReassigning || _requestId == null) return;
+    _isReassigning = true;
+    
+    try {
+      final rejectedBy = data['rejectedBy'] as List<dynamic>? ?? [];
+      String? nextEmtUid = await _getNearestAvailableEmt(rejectedBy: rejectedBy);
+
+      await FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .doc(_requestId)
+          .update({
+            'status': nextEmtUid != null ? 'assigned' : 'pending',
+            'assignedEmtUid': nextEmtUid,
+          });
+    } finally {
+      _isReassigning = false;
+    }
+  }
+
+  Future<void> _cancelRequest() async {
+    if (_requestId != null) {
+      await FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .doc(_requestId)
+          .update({'status': 'cancelled'});
+    }
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return PopScope(
+      canPop: false, // prevent accidental back-swipe during emergency
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // ── Full screen map ───────────────────────────────────
+            FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: _currentLocation,
+                initialZoom: 15,
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.stj.stj_medilink_plus',
+                ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: _currentLocation,
+                      width: 48,
+                      height: 48,
+                      child: const _PulsingMarker(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+            // ── Back button ───────────────────────────────────────
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 12,
+              left: 16,
+              child: _MapButton(
+                onTap: _cancelRequest,
+                child: const Icon(Icons.arrow_back, size: 20),
+              ),
+            ),
+
+            // ── Your location chip ────────────────────────────────
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 12,
+              right: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2D3A8C),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.location_on_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _locationLoaded ? l.yourLocation : l.locating,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Recenter button ───────────────────────────────────
+            Positioned(
+              bottom: 300,
+              right: 16,
+              child: _MapButton(
+                onTap: () => _mapController.move(_currentLocation, 15),
+                child: const Icon(
+                  Icons.my_location_rounded,
+                  size: 20,
+                  color: Color(0xFF2D3A8C),
+                ),
+              ),
+            ),
+
+            // ── Bottom sheet ──────────────────────────────────────
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 20,
+                      offset: const Offset(0, -4),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // ── Title ─────────────────────────────────
+                      Text(
+                        'Help is on the way!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      
+                      Text(
+                        'Your $_ambulanceType request has been sent.\nWaiting for an EMT to accept…',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.5,
+                          color: isDark ? Colors.white54 : Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // ── Spinning loader ───────────────────────
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RotationTransition(
+                            turns: _rotateCtrl,
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.red.shade400,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            _requestStatus == 'locating' ? 'Locating...' : 'Searching for nearby EMTs…',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? Colors.white70 : Colors.grey.shade700,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Request info card ─────────────────────
+                      if (_requestId != null)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF5F6FA),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Icon(
+                                  Icons.local_hospital_rounded,
+                                  color: Colors.red,
+                                  size: 22,
+                                ),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _ambulanceType,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                        color: isDark
+                                            ? Colors.white
+                                            : const Color(0xFF1A1A1A),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Case ID: ${_requestData['caseId'] ?? 'Generating...'}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isDark ? Colors.white70 : Colors.black54,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  _requestStatus.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.orange.shade700,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Cancel button ─────────────────────────
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: OutlinedButton(
+                          onPressed: _cancelRequest,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            side: const BorderSide(color: Colors.red),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Cancel Request',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAcceptedAndPop() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFE8F5E9),
+              ),
+              child: const Icon(
+                Icons.check_circle_rounded,
+                color: Colors.green,
+                size: 44,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'EMT Accepted!',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'An EMT has accepted your request and is on the way to your location.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+        actions: [
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // close dialog
+                
+                if (mounted && _requestId != null) {
+                  // Replace waiting screen with live tracking screen
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => EmtTrackingScreen(
+                        requestId: _requestId!,
+                        ambulanceType: _ambulanceType,
+                      ),
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Track EMT',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -690,24 +702,4 @@ class _MapButton extends StatelessWidget {
       ),
     );
   }
-}
-
-// ── Ambulance type model ──────────────────────────────────────────────────────
-
-class _AmbulanceType {
-  final String name;
-  final IconData icon;
-  final String capacity;
-  final String price;
-  final String stars;
-  final Color color;
-
-  const _AmbulanceType({
-    required this.name,
-    required this.icon,
-    required this.capacity,
-    required this.price,
-    required this.stars,
-    required this.color,
-  });
 }

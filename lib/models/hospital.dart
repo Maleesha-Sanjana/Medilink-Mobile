@@ -7,6 +7,7 @@ class Hospital {
   final double longitude;
   final DateTime? createdAt;
   final List<String> features;
+  final String status;
 
   const Hospital({
     required this.id,
@@ -15,6 +16,7 @@ class Hospital {
     required this.longitude,
     this.createdAt,
     this.features = const [],
+    this.status = 'approved',
   });
 
   factory Hospital.fromMap(String id, Map<String, dynamic> data) {
@@ -25,6 +27,7 @@ class Hospital {
       longitude: (data['longitude'] ?? 0).toDouble(),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
       features: List<String>.from(data['features'] ?? []),
+      status: data['status'] ?? 'approved',
     );
   }
 
@@ -35,6 +38,7 @@ class Hospital {
       'longitude': longitude,
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
       'features': features,
+      'status': status,
     };
   }
 }

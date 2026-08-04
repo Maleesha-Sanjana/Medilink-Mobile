@@ -22,10 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _phoneCtrl = TextEditingController();
   final _dobCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
-  final _emergNameCtrl = TextEditingController();
-  final _emergPhoneCtrl = TextEditingController();
-  final _medNotesCtrl = TextEditingController();
-  final _medHistoryCtrl = TextEditingController();
   
   // Payment Controllers
   final _cardNumCtrl = TextEditingController();
@@ -34,25 +30,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Dropdown values
   String? _gender;
-  String? _bloodType;
 
   bool _loading = false;
   bool _uploading = false;
   bool _editing = false;
   Map<String, dynamic> _userData = {};
   String? _photoUrl;
-
-  static const _bloodTypes = [
-    'A+',
-    'A−',
-    'B+',
-    'B−',
-    'AB+',
-    'AB−',
-    'O+',
-    'O−',
-    'Unknown',
-  ];
 
   @override
   void initState() {
@@ -74,10 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _phoneCtrl.text = d['phone'] ?? '';
         _dobCtrl.text = d['dob'] ?? '';
         _addressCtrl.text = d['address'] ?? '';
-        _emergNameCtrl.text = d['emergencyName'] ?? '';
-        _emergPhoneCtrl.text = d['emergencyPhone'] ?? '';
-        _medNotesCtrl.text = d['medicalNotes'] ?? '';
-        _medHistoryCtrl.text = d['medicalHistory'] ?? '';
         _cardNumCtrl.text = d['cardNumber'] ?? '';
         _expiryCtrl.text = d['expiryDate'] ?? '';
         _cvvCtrl.text = d['cvv'] ?? '';
@@ -89,9 +68,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               'Prefer not to say',
             ].contains(d['gender'])
             ? d['gender']
-            : null;
-        _bloodType = _bloodTypes.contains(d['bloodType'])
-            ? d['bloodType']
             : null;
         _photoUrl = d['photoUrl'];
       });
@@ -225,12 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'phone': _phoneCtrl.text.trim(),
             'dob': _dobCtrl.text.trim(),
             'gender': _gender ?? '',
-            'bloodType': _bloodType ?? '',
             'address': _addressCtrl.text.trim(),
-            'emergencyName': _emergNameCtrl.text.trim(),
-            'emergencyPhone': _emergPhoneCtrl.text.trim(),
-            'medicalNotes': _medNotesCtrl.text.trim(),
-            'medicalHistory': _medHistoryCtrl.text.trim(),
             'cardNumber': _cardNumCtrl.text.trim(),
             'expiryDate': _expiryCtrl.text.trim(),
             'cvv': _cvvCtrl.text.trim(),
@@ -261,10 +232,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _phoneCtrl.dispose();
     _dobCtrl.dispose();
     _addressCtrl.dispose();
-    _emergNameCtrl.dispose();
-    _emergPhoneCtrl.dispose();
-    _medNotesCtrl.dispose();
-    _medHistoryCtrl.dispose();
     _cardNumCtrl.dispose();
     _expiryCtrl.dispose();
     _cvvCtrl.dispose();
@@ -412,10 +379,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       .toUpperCase(),
                   color: const Color(0xFF2D3A8C),
                 ),
-                if (_bloodType != null && _bloodType!.isNotEmpty) ...[
-                  const SizedBox(width: 8),
-                  _Badge(label: _bloodType!, color: Colors.red),
-                ],
               ],
             ),
 
@@ -515,98 +478,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 20),
 
-            // ── Section: Medical Info ─────────────────────────────
-            _SectionHeader(title: l.medicalInfo, isDark: isDark),
-            const SizedBox(height: 12),
-            _Card(
-              isDark: isDark,
-              child: Column(
-                children: [
-                  // Blood type
-                  _FieldLabel(label: l.bloodType, tc: tc),
-                  const SizedBox(height: 6),
-                  _DropdownField(
-                    value: _bloodType,
-                    items: _bloodTypes,
-                    labels: null,
-                    hint: l.selectBloodType,
-                    icon: Icons.bloodtype_outlined,
-                    enabled: _editing,
-                    fill: fill,
-                    border: border,
-                    tc: tc,
-                    onChanged: (v) => setState(() => _bloodType = v),
-                  ),
-                  const SizedBox(height: 14),
-                  // Medical notes
-                  _FieldLabel(label: l.medicalNotes, tc: tc),
-                  const SizedBox(height: 6),
-                  TextField(
-                    controller: _medNotesCtrl,
-                    enabled: _editing,
-                    maxLines: 3,
-                    style: TextStyle(fontSize: 15, color: tc),
-                    decoration: _fieldDeco(
-                      icon: Icons.medical_information_outlined,
-                      hint: l.medicalNotesHint,
-                      fill: fill,
-                      border: border,
-                      enabled: _editing,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  // Medical history
-                  _FieldLabel(label: l.medicalHistory, tc: tc),
-                  const SizedBox(height: 6),
-                  TextField(
-                    controller: _medHistoryCtrl,
-                    enabled: _editing,
-                    maxLines: 3,
-                    style: TextStyle(fontSize: 15, color: tc),
-                    decoration: _fieldDeco(
-                      icon: Icons.history_outlined,
-                      hint: l.medicalHistoryHint,
-                      fill: fill,
-                      border: border,
-                      enabled: _editing,
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            const SizedBox(height: 20),
-
-            // ── Section: Emergency Contact ────────────────────────
-            _SectionHeader(title: l.emergencyContact, isDark: isDark),
-            const SizedBox(height: 12),
-            _Card(
-              isDark: isDark,
-              child: Column(
-                children: [
-                  _buildField(
-                    label: l.contactName,
-                    ctrl: _emergNameCtrl,
-                    icon: Icons.person_pin_outlined,
-                    fill: fill,
-                    border: border,
-                    tc: tc,
-                  ),
-                  const SizedBox(height: 14),
-                  _buildField(
-                    label: l.contactPhone,
-                    ctrl: _emergPhoneCtrl,
-                    icon: Icons.phone_outlined,
-                    fill: fill,
-                    border: border,
-                    tc: tc,
-                    keyboard: TextInputType.phone,
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
 
             // ── Section: Payment Details ────────────────────────
             _SectionHeader(title: l.paymentDetails, isDark: isDark),

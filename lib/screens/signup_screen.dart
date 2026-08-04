@@ -6,7 +6,6 @@ import '../theme/language_toggle_button.dart';
 import '../services/auth_service.dart';
 import '../services/auth_error.dart';
 import '../main.dart';
-import 'phone_auth_screen.dart';
 import '../l10n/app_localizations.dart';
 
 // Multicolor Google "G" SVG
@@ -45,32 +44,50 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Future<void> _signUp() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match'),
-          backgroundColor: Colors.red,
-        ),
-      );
+    final password = _passwordController.text;
+
+    if (password.length < 8) {
+      _showError('Password must be at least 8 characters long');
       return;
     }
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      _showError('Password must contain at least one lowercase letter');
+      return;
+    }
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      _showError('Password must contain at least one uppercase letter');
+      return;
+    }
+    if (!password.contains(RegExp(r'''[!@#\$&*~`%^()_\-+={}\[\]|\\:;"'<>,.?/]'''))) {
+      _showError('Password must contain at least one symbol (e.g., @, #)');
+      return;
+    }
+    if (password != _confirmPasswordController.text) {
+      _showError('Passwords do not match');
+      return;
+    }
+
     setState(() => _loading = true);
     try {
       await _auth.signUpWithEmail(
         email: _emailController.text,
-        password: _passwordController.text,
+        password: password,
         phone: _contactController.text,
       );
       _navigate();
     } on Exception catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authErrorMessage(e)),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError(authErrorMessage(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -81,24 +98,6 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       final result = await _auth.signInWithGoogle();
       if (result) _navigate();
-    } on Exception catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authErrorMessage(e)),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
-  Future<void> _appleSignIn() async {
-    setState(() => _loading = true);
-    try {
-      await _auth.signInWithApple();
-      _navigate();
     } on Exception catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -131,7 +130,6 @@ class _SignupScreenState extends State<SignupScreen> {
     final borderColor = isDark
         ? const Color(0xFF333333)
         : const Color(0xFFE0E0E0);
-    final appleColor = isDark ? Colors.white : Colors.black;
 
     return Scaffold(
       body: SafeArea(
@@ -333,49 +331,14 @@ class _SignupScreenState extends State<SignupScreen> {
 
                     const SizedBox(height: 24),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: _loading ? () {} : _googleSignIn,
-                            isDark: isDark,
-                            child: SvgPicture.string(
-                              _googleGSvg,
-                              height: 24,
-                              width: 24,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: _loading ? () {} : _appleSignIn,
-                            isDark: isDark,
-                            child: FaIcon(
-                              FontAwesomeIcons.apple,
-                              color: appleColor,
-                              size: 26,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _SocialIconButton(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const PhoneAuthScreen(),
-                              ),
-                            ),
-                            isDark: isDark,
-                            child: const Icon(
-                              Icons.phone_android_rounded,
-                              color: Color(0xFF2D3A8C),
-                              size: 26,
-                            ),
-                          ),
-                        ),
-                      ],
+                    _SocialIconButton(
+                      onTap: _loading ? () {} : _googleSignIn,
+                      isDark: isDark,
+                      child: SvgPicture.string(
+                        _googleGSvg,
+                        height: 24,
+                        width: 24,
+                      ),
                     ),
 
                     const SizedBox(height: 40),

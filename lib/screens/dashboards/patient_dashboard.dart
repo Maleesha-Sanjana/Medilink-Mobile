@@ -8,7 +8,9 @@ import '../../theme/theme_toggle_button.dart';
 import '../../theme/language_toggle_button.dart';
 import '../login_screen.dart';
 import '../emergency_screen.dart';
+import 'dart:math';
 import '../profile_screen.dart';
+import '../voice_call_screen.dart';
 
 class PatientDashboard extends StatelessWidget {
   const PatientDashboard({super.key});
@@ -83,14 +85,125 @@ class PatientDashboard extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('emergency_requests')
+              .where('uid', isEqualTo: user?.uid)
+              .where('status', whereIn: ['pending', 'assigned', 'accepted', 'transporting', 'arrived', 'admin_call'])
+              .snapshots(),
+          builder: (context, snapshot) {
+            final hasActiveCase = snapshot.hasData && snapshot.data!.docs.isNotEmpty;
+            final activeCaseDoc = hasActiveCase ? snapshot.data!.docs.first : null;
+            final activeCaseData = activeCaseDoc?.data() as Map<String, dynamic>?;
 
-              // ── Welcome text ──────────────────────────────────
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  
+                  if (hasActiveCase) ...[
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to tracking screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EmergencyScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: isDark 
+                              ? [const Color(0xFF1E2F26), const Color(0xFF141F18)] 
+                              : [Colors.red.shade50, Colors.white],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: isDark ? Colors.black38 : Colors.red.withValues(alpha: 0.15),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                          border: Border.all(
+                            color: isDark ? Colors.red.withValues(alpha: 0.2) : Colors.red.withValues(alpha: 0.3),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: isDark ? Colors.red.withValues(alpha: 0.2) : Colors.red.shade100,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.red.withValues(alpha: 0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(Icons.emergency_share_rounded, color: isDark ? Colors.red.shade400 : Colors.red.shade700, size: 26),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'ACTIVE EMERGENCY',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      letterSpacing: 1.5,
+                                      fontWeight: FontWeight.w800,
+                                      color: isDark ? Colors.red.shade400 : Colors.red.shade700,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    activeCaseData?['status'] == 'transporting' ? 'Ambulance is arriving' : 'Waiting for ambulance',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 18,
+                                      letterSpacing: -0.5,
+                                      color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Tap to track your request',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: isDark ? Colors.white70 : Colors.grey.shade700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.arrow_forward_ios_rounded, color: isDark ? Colors.white54 : Colors.grey.shade500, size: 16),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  // ── Welcome text ──────────────────────────────────
               Text(
                 l10n.welcomeBack,
                 style: TextStyle(
@@ -147,6 +260,25 @@ class PatientDashboard extends StatelessWidget {
                         ),
                       );
                     },
+                  ),
+                ),
+              ),
+              
+              // ── Call Admin Button ─────────────────────────────
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16, right: 16),
+                  child: ElevatedButton(
+                    onPressed: () => _callAdmin(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(16),
+                      elevation: 4,
+                    ),
+                    child: const Icon(Icons.call, size: 28),
                   ),
                 ),
               ),
@@ -212,10 +344,12 @@ class PatientDashboard extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
+        );
+      },
+    ),
+  ),
+);
+}
 
   Future<void> _saveSosLocation() async {
     try {
@@ -239,6 +373,63 @@ class PatientDashboard extends StatelessWidget {
       }
     } catch (e) {
       debugPrint('Failed to save SOS location: $e');
+    }
+  }
+
+  Future<void> _callAdmin(BuildContext context) async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.deniedForever) return;
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final caseId = 'CASE-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}-${Random().nextInt(9999).toString().padLeft(4, '0')}';
+        final patientName = user.displayName?.isNotEmpty == true ? user.displayName! : (user.email?.split('@').first ?? 'Patient');
+        
+        final doc = await FirebaseFirestore.instance.collection('emergency_requests').add({
+          'caseId': caseId,
+          'uid': user.uid,
+          'patientName': patientName,
+          'ambulanceType': 'Emergency Ambulance',
+          'price': 'LKR 5,000',
+          'latitude': pos.latitude,
+          'longitude': pos.longitude,
+          'status': 'admin_call',
+          'isAdminCall': true,
+          'isMandatory': true,
+          'rejectedBy': [],
+          'createdAt': FieldValue.serverTimestamp(),
+          'callState': 'ringing',
+          'callInitiatedBy': user.uid,
+          'callerName': patientName,
+          'callerIsEmt': false,
+          'callStartedAt': FieldValue.serverTimestamp(),
+        });
+        
+        if (context.mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => VoiceCallScreen(
+                requestId: doc.id,
+                callerName: patientName,
+                receiverName: 'Admin',
+                isIncoming: false,
+                isEmt: false,
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to call admin: $e');
     }
   }
 }

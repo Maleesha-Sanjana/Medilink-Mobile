@@ -12,6 +12,8 @@ import '../../theme/theme_toggle_button.dart';
 import '../../theme/language_toggle_button.dart';
 import '../../l10n/app_localizations.dart';
 import '../login_screen.dart';
+import '../voice_call_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/hospital.dart';
 import '../../services/hospital_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,11 +27,13 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard>
     with SingleTickerProviderStateMixin {
   late TabController _mainTabController;
+  bool _callScreenShown = false;
+  final String _uid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   @override
   void initState() {
     super.initState();
-    _mainTabController = TabController(length: 4, vsync: this);
+    _mainTabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -42,7 +46,48 @@ class _AdminDashboardState extends State<AdminDashboard>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l = AppLocalizations.of(context)!;
-    return Scaffold(
+    
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .where('isAdminCall', isEqualTo: true)
+          .where('callState', isEqualTo: 'ringing')
+          .limit(1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          final req = snapshot.data!.docs.first;
+          final reqData = req.data() as Map<String, dynamic>;
+          final callInitiatedBy = reqData['callInitiatedBy'] as String? ?? '';
+          
+          if (callInitiatedBy != _uid && !_callScreenShown) {
+            _callScreenShown = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => IncomingCallScreen(
+                      requestId: req.id,
+                      callerName: reqData['callerName'] ?? 'Patient',
+                      callerIsEmt: reqData['callerIsEmt'] ?? false,
+                      myName: 'Admin',
+                    ),
+                  ),
+                );
+              }
+            });
+          }
+        } else {
+          // Reset when there are no active incoming calls
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _callScreenShown) {
+              setState(() => _callScreenShown = false);
+            }
+          });
+        }
+        
+        return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RichText(
@@ -95,6 +140,7 @@ class _AdminDashboardState extends State<AdminDashboard>
             Tab(icon: Icon(Icons.airport_shuttle_rounded), text: 'Vehicles'),
             Tab(icon: Icon(Icons.people_rounded), text: 'Patients'),
             Tab(icon: const Icon(Icons.local_hospital_rounded), text: AppLocalizations.of(context)!.hospitalsTab),
+            const Tab(icon: Icon(Icons.call_rounded), text: 'Calls'),
           ],
         ),
         elevation: 0,
@@ -107,8 +153,11 @@ class _AdminDashboardState extends State<AdminDashboard>
           const _VehiclesTab(),
           _PatientList(),
           const _HospitalsTab(),
+          const _ActiveCallsTab(),
         ],
       ),
+    );
+      },
     );
   }
 }
@@ -292,28 +341,6 @@ class _VehicleCard extends StatelessWidget {
   final bool isDark;
   const _VehicleCard({required this.vehicle, required this.isDark});
 
-  Color get _statusColor {
-    switch (vehicle.status) {
-      case 'on_duty':
-        return Colors.orange;
-      case 'maintenance':
-        return Colors.red;
-      default:
-        return Colors.green;
-    }
-  }
-
-  String get _statusLabel {
-    switch (vehicle.status) {
-      case 'on_duty':
-        return 'On Duty';
-      case 'maintenance':
-        return 'Maintenance';
-      default:
-        return 'Available';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -362,32 +389,7 @@ class _VehicleCard extends StatelessWidget {
                         color: isDark ? Colors.white : const Color(0xFF1A1A1A),
                       ),
                     ),
-                    Text(
-                      vehicle.type,
-                      style: const TextStyle(
-                        color: Color(0xFFAAAAAA),
-                        fontSize: 13,
-                      ),
-                    ),
                   ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: _statusColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  _statusLabel,
-                  style: TextStyle(
-                    color: _statusColor,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                  ),
                 ),
               ),
             ],
@@ -576,58 +578,7 @@ class _VehicleDialogState extends State<_VehicleDialog> {
               'Vehicle Number',
               Icons.confirmation_number_outlined,
             ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
-              value: _type,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(
-                  Icons.airport_shuttle_rounded,
-                  color: Color(0xFF9FA8DA),
-                  size: 20,
-                ),
-                labelText: 'Type',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 14,
-                ),
-              ),
-              items: _types
-                  .map((t) => DropdownMenuItem(value: t, child: Text(t)))
-                  .toList(),
-              onChanged: (v) => setState(() => _type = v!),
-            ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
-              value: _status,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(
-                  Icons.circle_outlined,
-                  color: Color(0xFF9FA8DA),
-                  size: 20,
-                ),
-                labelText: 'Status',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 14,
-                ),
-              ),
-              items: _statuses
-                  .map(
-                    (s) => DropdownMenuItem(
-                      value: s,
-                      child: Text(_statusLabels[s]!),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (v) => setState(() => _status = v!),
-            ),
-            const SizedBox(height: 12),
+
             _f(_notesCtrl, 'Notes (optional)', Icons.notes_rounded),
           ],
         ),
@@ -1911,14 +1862,40 @@ class _HospitalCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      hospital.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: isDark ? Colors.white : const Color(0xFF1A1A1A),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            hospital.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: hospital.status == 'pending' 
+                                ? Colors.orange.withValues(alpha: 0.2) 
+                                : Colors.green.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            hospital.status.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: hospital.status == 'pending' ? Colors.orange : Colors.green,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       'Lat: ${hospital.latitude.toStringAsFixed(4)}, Lng: ${hospital.longitude.toStringAsFixed(4)}',
                       style: const TextStyle(
@@ -1935,6 +1912,15 @@ class _HospitalCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              if (hospital.status == 'pending')
+                TextButton.icon(
+                  onPressed: () async {
+                    await HospitalService().updateHospital(hospital.id, {'status': 'approved'});
+                  },
+                  icon: const Icon(Icons.check_circle_outline, size: 16),
+                  label: const Text('Approve'),
+                  style: TextButton.styleFrom(foregroundColor: Colors.green),
+                ),
               TextButton.icon(
                 onPressed: () {
                   showDialog(
@@ -2235,6 +2221,164 @@ class _HospitalDialogState extends State<_HospitalDialog> {
               : Text(AppLocalizations.of(context)!.register),
         ),
       ],
+    );
+  }
+}
+
+class _ActiveCallsTab extends StatelessWidget {
+  const _ActiveCallsTab();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('emergency_requests')
+          .where('isAdminCall', isEqualTo: true)
+          .snapshots(),
+      builder: (context, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        var docs = snap.data?.docs.where((d) {
+          final data = d.data() as Map<String, dynamic>;
+          return data['status'] != 'completed' && data['status'] != 'cancelled';
+        }).toList() ?? [];
+
+        docs.sort((a, b) {
+          final tA = (a.data() as Map<String, dynamic>)['timestamp'] as Timestamp?;
+          final tB = (b.data() as Map<String, dynamic>)['timestamp'] as Timestamp?;
+          if (tA == null || tB == null) return 0;
+          return tB.compareTo(tA);
+        });
+
+        if (docs.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.call_end_rounded, size: 56, color: Colors.grey.shade400),
+                const SizedBox(height: 12),
+                Text('No active admin calls', style: TextStyle(color: Colors.grey.shade500, fontSize: 15)),
+              ],
+            ),
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: docs.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 10),
+          itemBuilder: (context, i) {
+            final doc = docs[i];
+            final data = doc.data() as Map<String, dynamic>;
+            final patientName = data['patientName'] ?? 'Patient';
+            final status = data['status'] as String? ?? '';
+            
+            String statusText;
+            Color statusColor;
+            bool canAssign = false;
+
+            if (status == 'admin_call') {
+              statusText = 'Needs EMT Assignment';
+              statusColor = Colors.red;
+              canAssign = true;
+            } else if (status == 'assigned') {
+              statusText = 'Assigned to EMT';
+              statusColor = Colors.orange;
+            } else if (status == 'accepted') {
+              statusText = 'EMT En Route';
+              statusColor = Colors.blue;
+            } else {
+              statusText = status.toUpperCase();
+              statusColor = Colors.grey;
+            }
+
+            return Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.emergency_rounded, color: statusColor),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(patientName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(statusText, style: TextStyle(color: statusColor, fontSize: 13)),
+                      ],
+                    ),
+                  ),
+                  if (canAssign)
+                    ElevatedButton(
+                      onPressed: () => _assignEmt(context, doc.id),
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2D3A8C), foregroundColor: Colors.white),
+                      child: const Text('Assign EMT'),
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: statusColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        statusText,
+                        style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _assignEmt(BuildContext context, String requestId) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Select EMT to Assign'),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'emt').snapshots(),
+            builder: (context, snap) {
+              if (!snap.hasData) return const CircularProgressIndicator();
+              final emts = snap.data!.docs;
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: emts.length,
+                itemBuilder: (context, i) {
+                  final emt = emts[i].data() as Map<String, dynamic>;
+                  return ListTile(
+                    title: Text(emt['displayName'] ?? emt['email'] ?? 'EMT'),
+                    onTap: () async {
+                      await FirebaseFirestore.instance.collection('emergency_requests').doc(requestId).update({
+                        'status': 'assigned',
+                        'assignedEmtUid': emts[i].id,
+                      });
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

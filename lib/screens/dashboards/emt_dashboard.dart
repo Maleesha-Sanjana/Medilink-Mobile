@@ -15,6 +15,8 @@ import '../login_screen.dart';
 import '../chat_screen.dart';
 import '../patient_care_report_screen.dart';
 import '../collect_payment_screen.dart';
+import '../emt_hospital_registration_screen.dart';
+import '../hospital_selection_screen.dart';
 
 class EmtDashboard extends StatefulWidget {
   const EmtDashboard({super.key});
@@ -26,6 +28,24 @@ class EmtDashboard extends StatefulWidget {
 class _EmtDashboardState extends State<EmtDashboard> {
   final MapController _mapController = MapController();
   static const LatLng _defaultCenter = LatLng(6.9271, 79.8612);
+
+  static const List<String> _specialFacilities = [
+    'Emergency Department',
+    'ICU',
+    'Trauma Care',
+    'Operating Theatre',
+    'Cardiac Care Unit',
+    'Stroke Unit',
+    'X-Ray',
+    'CT Scan',
+    'MRI',
+    'Ventilator Support',
+    'Pediatric Unit',
+    'Maternity Unit',
+    'Burns Unit',
+    'Dialysis Unit',
+    'Other Special Requirements',
+  ];
 
   String? _selectedRequestId;
   Timer? _locationTimer;
@@ -171,23 +191,73 @@ class _EmtDashboardState extends State<EmtDashboard> {
     setState(() => _selectedRequestId = null);
   }
 
-  Future<void> _markArrived(String docId, Map<String, dynamic> data) async {
-    await FirebaseFirestore.instance
-        .collection('emergency_requests')
-        .doc(docId)
-        .update({'status': 'arrived'});
+  Future<void> _showFacilitiesSelectionDialog(String docId, Map<String, dynamic> data) async {
+    final List<String> selectedFacilities = [];
     
-    if (mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PatientCareReportScreen(
-            requestId: docId,
-            initialData: data,
-          ),
-        ),
-      );
-    }
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (innerContext, setState) {
+            return AlertDialog(
+              title: const Text('Required Facilities'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _specialFacilities.map((facility) {
+                    return CheckboxListTile(
+                      title: Text(facility),
+                      value: selectedFacilities.contains(facility),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          if (value == true) {
+                            selectedFacilities.add(facility);
+                          } else {
+                            selectedFacilities.remove(facility);
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    
+                    await FirebaseFirestore.instance
+                        .collection('emergency_requests')
+                        .doc(docId)
+                        .update({
+                          'status': 'arrived',
+                          'requiredFacilities': selectedFacilities,
+                        });
+                    
+                    if (mounted) {
+                      Navigator.push(
+                        context, // This now safely refers to _EmtDashboardState.context
+                        MaterialPageRoute(
+                          builder: (_) => HospitalSelectionScreen(
+                            requestId: docId,
+                            ambulanceType: data['ambulanceType'] ?? 'Basic',
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   Future<void> _showHandoverDialog(BuildContext context, String docId, Map<String, dynamic> data) async {
@@ -219,11 +289,13 @@ class _EmtDashboardState extends State<EmtDashboard> {
               
               final timestamp = DateTime.now();
               await FirebaseFirestore.instance.collection('emergency_requests').doc(docId).update({
+                'status': 'payment_pending',
                 'handoverDoctor': docCtrl.text.trim(),
                 'handoverTime': timestamp,
               });
               
               final updatedData = Map<String, dynamic>.from(data)
+                ..['status'] = 'payment_pending'
                 ..['handoverDoctor'] = docCtrl.text.trim()
                 ..['handoverTime'] = timestamp;
 
@@ -281,6 +353,16 @@ class _EmtDashboardState extends State<EmtDashboard> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.add_location_alt_rounded),
+            tooltip: 'Register Hospital',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const EmtHospitalRegistrationScreen()),
+              );
+            },
+          ),
           const ThemeToggleButton(),
           const LanguageToggleButton(),
           IconButton(
@@ -304,7 +386,7 @@ class _EmtDashboardState extends State<EmtDashboard> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('emergency_requests')
-            .where('status', whereIn: ['accepted', 'transporting'])
+            .where('status', whereIn: ['accepted', 'arrived', 'transporting'])
             .where(
               'emtUid',
               isEqualTo: FirebaseAuth.instance.currentUser?.uid,
@@ -322,81 +404,220 @@ class _EmtDashboardState extends State<EmtDashboard> {
               // ── Accepted request chat bar (if EMT has an active job) ──
               if (hasActiveRequest && doc != null && data != null)
                 Container(
-                margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.green.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.green.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: Colors.green,
-                      size: 18,
+                  margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: isDark 
+                        ? [const Color(0xFF1E2F26), const Color(0xFF141F18)] 
+                        : [Colors.green.shade50, Colors.white],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Active Case: ${data['caseId'] ?? 'N/A'}\n${data['status'] == 'transporting' ? 'To Hospital' : 'Patient: ${data['patientName'] ?? 'Patient'}'}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: isDark
-                              ? Colors.white
-                              : const Color(0xFF1A1A1A),
-                        ),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark ? Colors.black38 : Colors.green.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
                       ),
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: isDark ? Colors.green.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.3),
+                      width: 1.5,
                     ),
-                    // Map button
-                    _ActionChip(
-                      icon: Icons.directions_rounded,
-                      label: 'Map',
-                      color: Colors.blue,
-                      onTap: () async {
-                        final isTransporting = data['status'] == 'transporting';
-                        final lat = isTransporting ? (data['destinationLat'] as num?)?.toDouble() : (data['latitude'] as num?)?.toDouble();
-                        final lng = isTransporting ? (data['destinationLng'] as num?)?.toDouble() : (data['longitude'] as num?)?.toDouble();
-                        if (lat != null && lng != null) {
-                          final url = 'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng';
-                          if (await canLaunchUrl(Uri.parse(url))) {
-                            await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                          }
-                        }
-                      },
-                    ),
-                    const SizedBox(width: 8),
-                    // Chat button
-                    _ActionChip(
-                      icon: Icons.chat_bubble_outline_rounded,
-                      label: 'Chat',
-                      color: const Color(0xFF2D3A8C),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChatScreen(
-                            requestId: doc.id,
-                            myName: data['emtName'] ?? 'EMT',
-                            isEmt: true,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: isDark ? Colors.green.withValues(alpha: 0.2) : Colors.green.shade100,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.green.withValues(alpha: 0.2),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Icon(Icons.emergency_share_rounded, color: isDark ? Colors.green.shade400 : Colors.green.shade700, size: 26),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'ACTIVE EMERGENCY',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          letterSpacing: 1.5,
+                                          fontWeight: FontWeight.w800,
+                                          color: isDark ? Colors.green.shade400 : Colors.green.shade700,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: isDark ? Colors.black26 : Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.green.withValues(alpha: 0.2)),
+                                      ),
+                                      child: Text(
+                                        'Case: ${data['caseId'] ?? 'N/A'}',
+                                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isDark ? Colors.green.shade300 : Colors.green.shade800),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  data['status'] == 'transporting' ? 'En route to Hospital' : 'Attending to Patient',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18,
+                                    letterSpacing: -0.5,
+                                    color: isDark ? Colors.white : const Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.person_rounded, size: 14, color: isDark ? Colors.white60 : Colors.grey.shade600),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${data['patientName'] ?? 'Unknown Patient'}',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: isDark ? Colors.white70 : Colors.grey.shade700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Divider(height: 1, color: isDark ? Colors.white12 : Colors.black12),
+                      ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        // Map button
+                        _ActionChip(
+                          icon: Icons.directions_rounded,
+                          label: 'Map',
+                          color: Colors.blue,
+                          onTap: () async {
+                            final isTransporting = data['status'] == 'transporting';
+                            final lat = isTransporting ? (data['destinationLat'] as num?)?.toDouble() : (data['latitude'] as num?)?.toDouble();
+                            final lng = isTransporting ? (data['destinationLng'] as num?)?.toDouble() : (data['longitude'] as num?)?.toDouble();
+                            if (lat != null && lng != null) {
+                              final url = 'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng';
+                              if (await canLaunchUrl(Uri.parse(url))) {
+                                await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                              }
+                            }
+                          },
+                        ),
+                        // Chat button
+                        _ActionChip(
+                          icon: Icons.chat_bubble_outline_rounded,
+                          label: 'Chat',
+                          color: const Color(0xFF2D3A8C),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChatScreen(
+                                requestId: doc.id,
+                                myName: data['emtName'] ?? 'EMT',
+                                isEmt: true,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    // Arrived/Handover button
-                    _ActionChip(
-                      icon: data['status'] == 'transporting' ? Icons.local_hospital_rounded : Icons.location_on,
-                      label: data['status'] == 'transporting' ? 'Arrived to Hosp' : 'Arrived',
-                      color: data['status'] == 'transporting' ? Colors.green : Colors.orange.shade700,
-                      onTap: () => data['status'] == 'transporting' 
-                          ? _showHandoverDialog(context, doc.id, data)
-                          : _markArrived(doc.id, data),
+                        // PCR button
+                        if (data['status'] == 'transporting' || data['status'] == 'arrived')
+                          _ActionChip(
+                            icon: Icons.assignment_rounded,
+                            label: 'PCR',
+                            color: Colors.blueGrey,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PatientCareReportScreen(
+                                  requestId: doc.id,
+                                  initialData: data,
+                                ),
+                              ),
+                            ),
+                          ),
+                        // Arrived/Select Hospital/Handover button
+                        if (data['status'] == 'accepted')
+                          _ActionChip(
+                            icon: Icons.location_on,
+                            label: 'Arrived',
+                            color: Colors.orange.shade700,
+                            onTap: () => _showFacilitiesSelectionDialog(doc.id, data),
+                          ),
+                        if (data['status'] == 'arrived')
+                          _ActionChip(
+                            icon: Icons.local_hospital_rounded,
+                            label: 'Select Hospital',
+                            color: Colors.teal,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => HospitalSelectionScreen(
+                                  requestId: doc.id,
+                                  ambulanceType: data['ambulanceType'] ?? 'Basic',
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (data['status'] == 'transporting')
+                          _ActionChip(
+                            icon: Icons.local_hospital_rounded,
+                            label: 'Arrived to Hosp',
+                            color: Colors.green,
+                            onTap: () {
+                              if (data['patientCareReport'] == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please complete Patient Care Report first before arriving at hospital.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              } else {
+                                _showHandoverDialog(context, doc.id, data);
+                              }
+                            },
+                          ),
+                      ],
                     ),
                   ],
                 ),
@@ -807,27 +1028,29 @@ class _RequestCard extends StatelessWidget {
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                 ),
-                const SizedBox(height: 6),
-                OutlinedButton(
-                  onPressed: onReject,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.grey.shade700,
-                    side: BorderSide(color: Colors.grey.shade400),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 8,
+                if (data['isMandatory'] != true) ...[
+                  const SizedBox(height: 6),
+                  OutlinedButton(
+                    onPressed: onReject,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.grey.shade700,
+                      side: BorderSide(color: Colors.grey.shade400),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    child: const Text(
+                      'Reject',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                     ),
                   ),
-                  child: const Text(
-                    'Reject',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
-                  ),
-                ),
+                ],
               ],
             ),
           ],
@@ -939,23 +1162,32 @@ class _ActionChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.35),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.white, size: 14),
-            const SizedBox(width: 4),
+            Icon(icon, color: Colors.white, size: 16),
+            const SizedBox(width: 6),
             Text(
               label,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                letterSpacing: 0.3,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
